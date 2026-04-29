@@ -155,11 +155,7 @@
         </div>
       </section>
     </main>
-<<<<<<< Updated upstream
     <AppFooter />
-=======
-    <Footer />
->>>>>>> Stashed changes
   </div>
 </template>
 
@@ -176,11 +172,7 @@ import {
   MousePointerClick,
 } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
-<<<<<<< Updated upstream
 import AppFooter from '../components/AppFooter.vue';
-=======
-import Footer from '../components/Footer.vue';
->>>>>>> Stashed changes
 import TemplateThumb from '../components/TemplateThumb.vue';
 import { TEMPLATES } from '../templates';
 
@@ -188,11 +180,7 @@ export default defineComponent({
   name: 'Landing',
   components: {
     Navbar,
-<<<<<<< Updated upstream
     AppFooter,
-=======
-    Footer,
->>>>>>> Stashed changes
     TemplateThumb,
     Sparkles,
     ArrowRight,

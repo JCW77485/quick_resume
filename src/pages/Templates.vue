@@ -57,22 +57,14 @@
         </router-link>
       </div>
     </main>
-<<<<<<< Updated upstream
     <AppFooter />
-=======
-    <Footer />
->>>>>>> Stashed changes
   </div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import Navbar from '../components/Navbar.vue';
-<<<<<<< Updated upstream
 import AppFooter from '../components/AppFooter.vue';
-=======
-import Footer from '../components/Footer.vue';
->>>>>>> Stashed changes
 import { TEMPLATES } from '../templates';
 import ResumePreview from '../components/ResumePreview.vue';
 import { sampleResume } from '../lib/defaults';
@@ -83,11 +75,7 @@ export default defineComponent({
   name: 'Templates',
   components: {
     Navbar,
-<<<<<<< Updated upstream
     AppFooter,
-=======
-    Footer,
->>>>>>> Stashed changes
     ResumePreview
   },
   data() {

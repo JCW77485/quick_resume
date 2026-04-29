@@ -6,11 +6,7 @@
         class="flex items-center gap-2 font-semibold text-slate-900"
       >
         <span class="grid h-7 w-7 place-items-center rounded-md bg-brand-600 text-white">
-<<<<<<< Updated upstream
           <FileText :size="16" />
-=======
-          <FileText icon-size="16" />
->>>>>>> Stashed changes
         </span>
         QuickResume
       </router-link>
