@@ -27,7 +27,11 @@
 </template>
 
 <script lang="ts">
+<<<<<<< Updated upstream
 import { defineComponent } from 'vue';
+=======
+import { defineComponent, type Component } from 'vue';
+>>>>>>> Stashed changes
 import ResumePage from './ResumePage.vue';
 import type { Resume } from '../types/resume';
 import ClassicTemplate from '../templates/ClassicTemplate.vue';

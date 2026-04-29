@@ -12,9 +12,13 @@ import { defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'TextInput',
+<<<<<<< Updated upstream
   props: {
     modelValue: { type: String, default: '' }
   },
+=======
+  props: ['modelValue'],
+>>>>>>> Stashed changes
   emits: ['update:modelValue']
 });
 </script>

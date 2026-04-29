@@ -109,7 +109,11 @@
         </template>
       </div>
     </main>
+<<<<<<< Updated upstream
     <AppFooter />
+=======
+    <Footer />
+>>>>>>> Stashed changes
 
     <!-- Confirmation Modal -->
     <div
@@ -152,7 +156,11 @@
 import { defineComponent } from 'vue';
 import { Copy, FilePlus, FileText, Trash2 } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
+<<<<<<< Updated upstream
 import AppFooter from '../components/AppFooter.vue';
+=======
+import Footer from '../components/Footer.vue';
+>>>>>>> Stashed changes
 import ResumePreview from '../components/ResumePreview.vue';
 import { useResumes } from '../store/resumes';
 
@@ -160,7 +168,11 @@ export default defineComponent({
   name: 'Dashboard',
   components: {
     Navbar,
+<<<<<<< Updated upstream
     AppFooter,
+=======
+    Footer,
+>>>>>>> Stashed changes
     ResumePreview,
     Copy,
     FilePlus,

@@ -145,7 +145,11 @@ export default defineComponent({
     };
   },
   methods: {
+<<<<<<< Updated upstream
     setDesign(key: string, value: string | number | boolean) {
+=======
+    setDesign(key: string, value: any) {
+>>>>>>> Stashed changes
       this.$emit('update', (r: Resume) => ({
         ...r,
         design: { ...r.design, [key]: value }
