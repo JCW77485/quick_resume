@@ -10,7 +10,7 @@
           :key="t.id"
           type="button"
           :class="[
-            'overflow-hidden rounded-lg border text-left transition',
+            'no-print overflow-hidden rounded-lg border text-left transition',
             resume.design.template === t.id
               ? 'border-brand-500 ring-2 ring-brand-200'
               : 'border-slate-200 hover:border-slate-300'

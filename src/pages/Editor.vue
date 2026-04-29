@@ -21,7 +21,7 @@
     class="flex h-screen flex-col bg-slate-100"
   >
     <!-- Top bar -->
-    <header class="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-2">
+    <header class="no-print flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-2">
       <button
         type="button"
         class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900"
@@ -77,7 +77,7 @@
     <!-- Body -->
     <div class="flex min-h-0 flex-1">
       <!-- Left panel -->
-      <aside class="flex w-full max-w-xl shrink-0 flex-col border-r border-slate-200 bg-slate-50 lg:w-[44%]">
+      <aside class="no-print flex w-full max-w-xl shrink-0 flex-col border-r border-slate-200 bg-slate-50 lg:w-[44%]">
         <div class="flex shrink-0 items-center gap-1 border-b border-slate-200 bg-white px-2 py-2">
           <button
             type="button"
@@ -154,7 +154,7 @@
         ref="previewContainer"
         class="scroll-thin relative min-w-0 flex-1 overflow-auto"
       >
-        <div class="sticky top-0 z-10 flex items-center justify-end gap-2 border-b border-slate-200 bg-slate-50/90 px-4 py-2 backdrop-blur">
+        <div class="no-print sticky top-0 z-10 flex items-center justify-end gap-2 border-b border-slate-200 bg-slate-50/90 px-4 py-2 backdrop-blur">
           <!-- Zoom controls could go here -->
         </div>
         <div class="flex justify-center p-6">
@@ -308,34 +308,7 @@ export default defineComponent({
       return map[key];
     },
     print() {
-      const mainPreview = document.getElementById('main-resume-preview');
-      const printTarget = (mainPreview?.querySelector('[data-print-target]') ||
-                          document.querySelector('[data-print-target]')) as HTMLElement;
-      if (!printTarget) return;
-
-      const styles = Array.from(document.styleSheets)
-        .flatMap(sheet => {
-          try {
-            return Array.from(sheet.cssRules).map(rule => rule.cssText);
-          } catch {
-            return [];
-          }
-        });
-
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;border:none;';
-      document.body.appendChild(iframe);
-
-      const doc = iframe.contentDocument!;
-      doc.open();
-      doc.write(`<!DOCTYPE html><html><head><style>${styles.join('\n')}@page { size: Letter; margin: 0; } body { margin: 0; padding: 0; }</style></head><body>${printTarget.outerHTML}</body></html>`);
-      doc.close();
-
-      iframe.onload = () => {
-        iframe.contentWindow!.focus();
-        iframe.contentWindow!.print();
-        setTimeout(() => document.body.removeChild(iframe), 1000);
-      };
+      window.print();
     }
   }
 });

@@ -36,7 +36,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Print rules: when printing, only show the element marked .print-area */
+/* Print rules */
 @media print {
   @page {
     size: Letter;
@@ -47,31 +47,49 @@ body {
     margin: 0 !important;
     padding: 0 !important;
     background: white !important;
+    height: auto !important;
   }
+
+  .no-print,
+  .no-print * {
+    display: none !important;
+  }
+
   body * {
     visibility: hidden !important;
   }
+
+  /* Ensure the main container doesn't restrict height or provide scrollbars */
+  #root,
+  .flex.h-screen {
+    height: auto !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+
   /* Reset transforms on ancestors so the print target renders at full size. */
   .resume-preview-stage,
   .resume-preview-scale {
+    visibility: visible !important;
+    display: block !important;
     transform: none !important;
-    width: auto !important;
+    width: 8.5in !important;
     height: auto !important;
+    min-height: 11in !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
   }
+
   [data-print-target],
   [data-print-target] * {
-    visibility: visible !important;  /* ADD THIS */
+    visibility: visible !important;
     transform: none !important;
     scale: 1 !important;
   }
 
-  [data-print-target] > * {
-    visibility: visible !important;
-    transform: none !important;
-  }
   [data-print-target] {
-    visibility: visible !important;
-    position: absolute !important;   /* ← fixed → absolute */
+    position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     width: 8.5in !important;
@@ -79,8 +97,6 @@ body {
     min-height: 11in !important;
     margin: 0 !important;
     padding: 0 !important;
-    transform: none !important;
-    zoom: 1 !important;
     box-shadow: none !important;
     background: white !important;
     overflow: visible !important;
