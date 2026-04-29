@@ -9,7 +9,7 @@
   >
     <div
       class="resume-preview-scale"
-      data-print-target
+      :data-print-target="printable ? true : undefined"
       :style="{
         transform: printable ? 'none' : `scale(${scale})`,
         transformOrigin: 'top left',

@@ -159,6 +159,7 @@
         </div>
         <div class="flex justify-center p-6">
           <ResumePreview
+            id="main-resume-preview"
             :resume="resume"
             :scale="scale"
             printable
@@ -307,7 +308,9 @@ export default defineComponent({
       return map[key];
     },
     print() {
-      const printTarget = document.querySelector('[data-print-target]') as HTMLElement;
+      const mainPreview = document.getElementById('main-resume-preview');
+      const printTarget = (mainPreview?.querySelector('[data-print-target]') ||
+                          document.querySelector('[data-print-target]')) as HTMLElement;
       if (!printTarget) return;
 
       const styles = Array.from(document.styleSheets)
@@ -325,7 +328,7 @@ export default defineComponent({
 
       const doc = iframe.contentDocument!;
       doc.open();
-      doc.write(`<!DOCTYPE html><html><head><style>${styles.join('\n')}@page { size: Letter; margin: 0; } body { margin: 0; padding: 0; }</style></head><body>${printTarget.innerHTML}</body></html>`);
+      doc.write(`<!DOCTYPE html><html><head><style>${styles.join('\n')}@page { size: Letter; margin: 0; } body { margin: 0; padding: 0; }</style></head><body>${printTarget.outerHTML}</body></html>`);
       doc.close();
 
       iframe.onload = () => {

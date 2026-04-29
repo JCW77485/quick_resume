@@ -1,6 +1,6 @@
 <template>
   <div
-    :data-print-target="printable ? 'true' : undefined"
+    :data-print-target="printable ? true : undefined"
     :class="['bg-white shadow-md', className]"
     :style="{
       width: '8.5in',
