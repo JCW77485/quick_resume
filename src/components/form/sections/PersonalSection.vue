@@ -127,7 +127,7 @@ export default defineComponent({
     p() { return this.resume.personal; }
   },
   methods: {
-    set(key: string, value: string) {
+    set(key: keyof Resume['personal'], value: string) {
       this.$emit('update', (r: Resume) => ({
         ...r,
         personal: { ...r.personal, [key]: value }

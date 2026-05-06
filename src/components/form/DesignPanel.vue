@@ -145,7 +145,7 @@ export default defineComponent({
     };
   },
   methods: {
-    setDesign(key: string, value: string | number | boolean) {
+    setDesign(key: keyof Resume['design'], value: string | number | boolean) {
       this.$emit('update', (r: Resume) => ({
         ...r,
         design: { ...r.design, [key]: value }

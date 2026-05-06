@@ -34,7 +34,7 @@
         <template v-if="editingName">
           <input
             v-model="nameDraft"
-            autoFocus
+            autofocus
             class="w-64 rounded-md border border-slate-300 px-2 py-1 text-sm font-semibold text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
             @blur="saveName"
             @keydown.enter="saveName"
@@ -160,9 +160,17 @@
         <div class="flex justify-center p-6">
           <ResumePreview
             id="main-resume-preview"
+            class="no-print"
             :resume="resume"
             :scale="scale"
           />
+          <!-- Hidden printable version -->
+          <div class="print:block hidden">
+            <ResumePreview
+              :resume="resume"
+              :printable="true"
+            />
+          </div>
         </div>
       </section>
     </div>
