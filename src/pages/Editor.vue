@@ -162,7 +162,6 @@
             id="main-resume-preview"
             :resume="resume"
             :scale="scale"
-            printable
           />
         </div>
       </section>
