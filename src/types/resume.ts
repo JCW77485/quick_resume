@@ -10,6 +10,7 @@ export interface PersonalInfo {
   linkedin: string;
   github: string;
   summary: string;
+  avatar?: string;
 }
 
 export interface ExperienceItem {

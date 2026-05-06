@@ -26,6 +26,7 @@ export function emptyResume(name = "Untitled resume"): Resume {
       linkedin: "",
       github: "",
       summary: "",
+      avatar: "",
     },
     experience: [],
     education: [],
@@ -62,6 +63,7 @@ export function sampleResume(): Resume {
       github: "github.com/alexmorgan",
       summary:
         "Full-stack engineer with 7+ years of experience shipping reliable, high-traffic web products. Skilled at leading small teams, owning features end to end, and turning ambiguous requirements into clean, maintainable code.",
+      avatar: "",
     },
     experience: [
       {

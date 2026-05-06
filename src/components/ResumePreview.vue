@@ -34,6 +34,7 @@ import ClassicTemplate from '../templates/ClassicTemplate.vue';
 import CompactTemplate from '../templates/CompactTemplate.vue';
 import ModernTemplate from '../templates/ModernTemplate.vue';
 import TwoColumnTemplate from '../templates/TwoColumnTemplate.vue';
+import PremiumTemplate from '../templates/PremiumTemplate.vue';
 
 export default defineComponent({
   name: 'ResumePreview',
@@ -42,7 +43,8 @@ export default defineComponent({
     ClassicTemplate,
     CompactTemplate,
     ModernTemplate,
-    TwoColumnTemplate
+    TwoColumnTemplate,
+    PremiumTemplate
   },
   props: {
     resume: { type: Object as () => Resume, required: true },
@@ -62,7 +64,8 @@ export default defineComponent({
         classic: 'ClassicTemplate',
         compact: 'CompactTemplate',
         modern: 'ModernTemplate',
-        twocol: 'TwoColumnTemplate'
+        twocol: 'TwoColumnTemplate',
+        premium: 'PremiumTemplate'
       };
       return map[this.resume.design.template] || 'ClassicTemplate';
     }

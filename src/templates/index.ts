@@ -19,6 +19,11 @@ export const TEMPLATES = [
     name: "Compact",
     description: "Maximum info in minimum space.",
   },
+  {
+    id: "premium",
+    name: "Premium",
+    description: "Modern layout with profile picture support.",
+  },
 ] as const;
 
 export type TemplateId = (typeof TEMPLATES)[number]["id"];
