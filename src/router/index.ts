@@ -5,6 +5,7 @@ import Dashboard from '../pages/Dashboard.vue';
 import Editor from '../pages/Editor.vue';
 import Login from '../pages/Login.vue';
 import Pricing from '../pages/Pricing.vue';
+import Admin from '../pages/Admin.vue';
 import { useAuth } from '../store/auth';
 
 const routes = [
@@ -22,6 +23,11 @@ const routes = [
     component: Editor,
     meta: { requiresAuth: true }
   },
+  {
+    path: '/admin',
+    component: Admin,
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
 
@@ -38,6 +44,8 @@ router.beforeEach(async (to, _from, next) => {
 
   if (to.meta.requiresAuth && !auth.user) {
     next('/login');
+  } else if (to.meta.requiresAdmin && !auth.isAdmin) {
+    next('/builder');
   } else if (to.path === '/login' && auth.user) {
     next('/builder');
   } else {

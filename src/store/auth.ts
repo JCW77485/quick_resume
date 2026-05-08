@@ -6,6 +6,7 @@ import { auth, db } from "../lib/firebase";
 interface AuthState {
   user: User | null;
   isPro: boolean;
+  isAdmin: boolean;
   loading: boolean;
   initialized: boolean;
 }
@@ -14,6 +15,7 @@ export const useAuth = defineStore("auth", {
   state: (): AuthState => ({
     user: null,
     isPro: false,
+    isAdmin: false,
     loading: true,
     initialized: false,
   }),
@@ -43,12 +45,15 @@ export const useAuth = defineStore("auth", {
         if (userDoc.exists()) {
           const data = userDoc.data();
           this.isPro = data.isPro || false;
+          this.isAdmin = data.isAdmin || false;
         } else {
           this.isPro = false;
+          this.isAdmin = false;
         }
       } catch (error) {
         console.error("Error checking subscription:", error);
         this.isPro = false;
+        this.isAdmin = false;
       }
     },
 
@@ -56,6 +61,7 @@ export const useAuth = defineStore("auth", {
       await auth.signOut();
       this.user = null;
       this.isPro = false;
+      this.isAdmin = false;
     }
   },
 });
