@@ -174,6 +174,60 @@
         </div>
       </section>
     </div>
+
+    <!-- Upgrade Modal -->
+    <div
+      v-if="showUpgradeModal"
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+    >
+      <div class="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div class="relative bg-brand-600 p-8 text-center text-white">
+          <button
+            type="button"
+            class="absolute top-4 right-4 text-white/80 hover:text-white"
+            @click="showUpgradeModal = false"
+          >
+            <X :size="20" />
+          </button>
+          <div class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-white/20">
+            <Crown :size="32" />
+          </div>
+          <h3 class="text-2xl font-bold">Unlock PDF Downloads</h3>
+          <p class="mt-2 text-brand-100">
+            Upgrade to Pro to download and print your professional resumes.
+          </p>
+        </div>
+        <div class="p-6">
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-slate-600">
+              <Check class="text-emerald-500" :size="16" /> Unlimited high-quality PDF exports
+            </li>
+            <li class="flex items-center gap-3 text-sm text-slate-600">
+              <Check class="text-emerald-500" :size="16" /> Access to all premium templates
+            </li>
+            <li class="flex items-center gap-3 text-sm text-slate-600">
+              <Check class="text-emerald-500" :size="16" /> One-time payment for lifetime access
+            </li>
+          </ul>
+          <div class="mt-8 flex flex-col gap-3">
+            <button
+              type="button"
+              class="w-full rounded-xl bg-brand-600 py-3 text-sm font-bold text-white shadow-lg shadow-brand-200 transition hover:bg-brand-700 active:scale-[0.98]"
+              @click="$router.push('/pricing')"
+            >
+              Upgrade for $10
+            </button>
+            <button
+              type="button"
+              class="w-full py-2 text-sm font-medium text-slate-500 hover:text-slate-700"
+              @click="showUpgradeModal = false"
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -181,6 +235,8 @@
 import { defineComponent } from 'vue';
 import {
   ArrowLeft,
+  Crown,
+  X,
   Check,
   Download,
   FileText,
@@ -190,6 +246,7 @@ import {
   Plus,
 } from 'lucide-vue-next';
 import { SECTION_LABELS, useResumes } from '../store/resumes';
+import { useAuth } from '../store/auth';
 import type { Resume, SectionKey } from '../types/resume';
 import ResumePreview from '../components/ResumePreview.vue';
 import PersonalSection from '../components/form/sections/PersonalSection.vue';
@@ -226,6 +283,8 @@ export default defineComponent({
     LanguagesSection,
     DesignPanel,
     ArrowLeft,
+    Crown,
+    X,
     Check,
     Download,
     FileText,
@@ -242,6 +301,7 @@ export default defineComponent({
       scale: 0.72,
       savedAt: null as number | null,
       resizeObserver: null as ResizeObserver | null,
+      showUpgradeModal: false,
       SECTION_LABELS
     };
   },
@@ -250,6 +310,7 @@ export default defineComponent({
     resume(): Resume | undefined {
       return useResumes().resumes[this.id];
     },
+    auth() { return useAuth(); },
     availableSections(): SectionKey[] {
       if (!this.resume) return [];
       return SECTION_ORDER.filter((k) => !this.resume!.sections.includes(k));
@@ -315,6 +376,10 @@ export default defineComponent({
       return map[key];
     },
     print() {
+      if (!this.auth.isPro) {
+        this.showUpgradeModal = true;
+        return;
+      }
       window.print();
     }
   }
