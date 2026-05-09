@@ -192,9 +192,11 @@
           <div class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-white/20">
             <Crown :size="32" />
           </div>
-          <h3 class="text-2xl font-bold">Unlock PDF Downloads</h3>
+          <h3 class="text-2xl font-bold">
+            {{ !auth.user ? 'Sign in to Download' : 'Unlock PDF Downloads' }}
+          </h3>
           <p class="mt-2 text-brand-100">
-            Upgrade to Pro to download and print your professional resumes.
+            {{ !auth.user ? 'Create an account to save and download your resume.' : 'Upgrade to Pro to download and print your professional resumes.' }}
           </p>
         </div>
         <div class="p-6">
@@ -203,14 +205,23 @@
               <Check class="text-emerald-500" :size="16" /> Unlimited high-quality PDF exports
             </li>
             <li class="flex items-center gap-3 text-sm text-slate-600">
-              <Check class="text-emerald-500" :size="16" /> Access to all premium templates
+              <Check class="text-emerald-500" :size="16" /> Access to all 10 premium templates
             </li>
             <li class="flex items-center gap-3 text-sm text-slate-600">
-              <Check class="text-emerald-500" :size="16" /> One-time payment for lifetime access
+              <Check class="text-emerald-500" :size="16" /> Lifetime access to your resumes
             </li>
           </ul>
           <div class="mt-8 flex flex-col gap-3">
             <button
+              v-if="!auth.user"
+              type="button"
+              class="w-full rounded-xl bg-brand-600 py-3 text-sm font-bold text-white shadow-lg shadow-brand-200 transition hover:bg-brand-700 active:scale-[0.98]"
+              @click="$router.push('/login')"
+            >
+              Sign up free
+            </button>
+            <button
+              v-else
               type="button"
               class="w-full rounded-xl bg-brand-600 py-3 text-sm font-bold text-white shadow-lg shadow-brand-200 transition hover:bg-brand-700 active:scale-[0.98]"
               @click="$router.push('/pricing')"
@@ -376,7 +387,7 @@ export default defineComponent({
       return map[key];
     },
     print() {
-      if (!this.auth.isPro) {
+      if (!this.auth.user || !this.auth.isPro) {
         this.showUpgradeModal = true;
         return;
       }

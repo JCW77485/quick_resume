@@ -15,13 +15,11 @@ const routes = [
   { path: '/templates', component: Templates },
   {
     path: '/builder',
-    component: Dashboard,
-    meta: { requiresAuth: true }
+    component: Dashboard
   },
   {
     path: '/builder/:id',
-    component: Editor,
-    meta: { requiresAuth: true }
+    component: Editor
   },
   {
     path: '/admin',
