@@ -1,4 +1,14 @@
-export type TemplateId = "classic" | "modern" | "compact" | "twocol";
+export type TemplateId =
+  | "classic"
+  | "modern"
+  | "compact"
+  | "twocol"
+  | "premium"
+  | "executive"
+  | "creative"
+  | "minimalist"
+  | "technical"
+  | "portfolio";
 
 export interface PersonalInfo {
   fullName: string;
@@ -10,6 +20,7 @@ export interface PersonalInfo {
   linkedin: string;
   github: string;
   summary: string;
+  avatar?: string;
 }
 
 export interface ExperienceItem {
