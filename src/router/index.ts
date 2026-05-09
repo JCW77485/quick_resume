@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { createRouter, createWebHistory } from 'vue-router';
 import Landing from '../pages/Landing.vue';
 import Templates from '../pages/Templates.vue';
 import Dashboard from '../pages/Dashboard.vue';
@@ -13,6 +14,9 @@ const routes = [
 ];
 
 export const router = createRouter({
+  history: createWebHistory(),
+  routes
+});
   history: createWebHistory(),
   routes
 });

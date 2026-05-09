@@ -8,6 +8,7 @@
       display: 'grid',
       gridTemplateColumns: '3.1in 1fr',
       minHeight: '100%',
+      minHeight: '100%',
     }"
   >
     <!-- Left Sidebar -->
