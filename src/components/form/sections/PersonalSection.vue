@@ -4,6 +4,7 @@
     subtitle="Your name, title, and contact info"
     :default-open="true"
   >
+<<<<<<< HEAD
     <div class="mb-6 flex items-center gap-4">
       <div class="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg border-2 border-dashed border-slate-300 bg-slate-50">
         <img
@@ -42,6 +43,8 @@
       </div>
     </div>
 
+=======
+>>>>>>> origin/main
     <div class="grid gap-3 sm:grid-cols-2">
       <Field label="Full name">
         <TextInput
@@ -105,7 +108,10 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+<<<<<<< HEAD
 import { Camera } from 'lucide-vue-next';
+=======
+>>>>>>> origin/main
 import type { Resume } from '../../../types/resume';
 import Field from '../Field.vue';
 import TextInput from '../TextInput.vue';
@@ -116,8 +122,12 @@ export default defineComponent({
   components: {
     Field,
     TextInput,
+<<<<<<< HEAD
     SectionCard,
     Camera
+=======
+    SectionCard
+>>>>>>> origin/main
   },
   props: {
     resume: { type: Object as () => Resume, required: true }
@@ -127,11 +137,16 @@ export default defineComponent({
     p() { return this.resume.personal; }
   },
   methods: {
+<<<<<<< HEAD
     set(key: keyof Resume['personal'], value: string) {
+=======
+    set(key: string, value: string) {
+>>>>>>> origin/main
       this.$emit('update', (r: Resume) => ({
         ...r,
         personal: { ...r.personal, [key]: value }
       }));
+<<<<<<< HEAD
     },
     handleAvatarUpload(event: Event) {
       const target = event.target as HTMLInputElement;
@@ -149,6 +164,8 @@ export default defineComponent({
         this.set("avatar", result);
       };
       reader.readAsDataURL(file);
+=======
+>>>>>>> origin/main
     }
   }
 });

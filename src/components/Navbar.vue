@@ -24,6 +24,7 @@
           <span :class="linkClass(isActive)">My Resumes</span>
         </router-link>
       </nav>
+<<<<<<< HEAD
       <div class="flex items-center gap-3">
         <template v-if="auth.user">
           <router-link
@@ -50,6 +51,14 @@
           </router-link>
         </template>
       </div>
+=======
+      <router-link
+        to="/builder"
+        class="hidden rounded-md bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700 md:inline-flex"
+      >
+        Get started
+      </router-link>
+>>>>>>> origin/main
     </div>
   </header>
 </template>
@@ -57,13 +66,17 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { FileText } from 'lucide-vue-next';
+<<<<<<< HEAD
 import { useAuth } from '../store/auth';
+=======
+>>>>>>> origin/main
 
 export default defineComponent({
   name: 'Navbar',
   components: {
     FileText
   },
+<<<<<<< HEAD
   computed: {
     auth() { return useAuth(); }
   },
@@ -72,6 +85,9 @@ export default defineComponent({
       await this.auth.logout();
       this.$router.push('/');
     },
+=======
+  methods: {
+>>>>>>> origin/main
     linkClass(isActive: boolean) {
       return "text-sm font-medium transition-colors cursor-pointer " +
         (isActive ? "text-brand-700" : "text-slate-600 hover:text-slate-900");

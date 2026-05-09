@@ -8,6 +8,7 @@ declare module "*.css" {
   const content: Record<string, string>;
   export default content;
 }
+<<<<<<< HEAD
 
 interface ImportMetaEnv {
   readonly VITE_FIREBASE_API_KEY: string
@@ -21,3 +22,5 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
+=======
+>>>>>>> origin/main

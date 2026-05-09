@@ -19,6 +19,7 @@ export const TEMPLATES = [
     name: "Compact",
     description: "Maximum info in minimum space.",
   },
+<<<<<<< HEAD
   {
     id: "premium",
     name: "Premium",
@@ -49,6 +50,8 @@ export const TEMPLATES = [
     name: "Portfolio",
     description: "Visual-heavy layout for creators and developers.",
   },
+=======
+>>>>>>> origin/main
 ] as const;
 
 export type TemplateId = (typeof TEMPLATES)[number]["id"];

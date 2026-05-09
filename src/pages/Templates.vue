@@ -7,7 +7,11 @@
           Resume Templates
         </h1>
         <p class="mt-2 text-slate-600">
+<<<<<<< HEAD
           Ten carefully designed layouts, all ATS-friendly. Click “Use this” to start editing.
+=======
+          Four carefully designed layouts, all ATS-friendly. Click “Use this” to start editing.
+>>>>>>> origin/main
         </p>
       </div>
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-2">

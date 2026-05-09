@@ -7,7 +7,11 @@
       color: '#0f172a',
       display: 'grid',
       gridTemplateColumns: '3.1in 1fr',
+<<<<<<< HEAD
       minHeight: '11in',
+=======
+      minHeight: '100%',
+>>>>>>> origin/main
     }"
   >
     <!-- Left Sidebar -->

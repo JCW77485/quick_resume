@@ -1,8 +1,13 @@
+<<<<<<< HEAD
 import { createRouter, createWebHashHistory } from 'vue-router';
+=======
+import { createRouter, createWebHistory } from 'vue-router';
+>>>>>>> origin/main
 import Landing from '../pages/Landing.vue';
 import Templates from '../pages/Templates.vue';
 import Dashboard from '../pages/Dashboard.vue';
 import Editor from '../pages/Editor.vue';
+<<<<<<< HEAD
 import Login from '../pages/Login.vue';
 import Pricing from '../pages/Pricing.vue';
 import Admin from '../pages/Admin.vue';
@@ -26,10 +31,19 @@ const routes = [
     component: Admin,
     meta: { requiresAuth: true, requiresAdmin: true }
   },
+=======
+
+const routes = [
+  { path: '/', component: Landing },
+  { path: '/templates', component: Templates },
+  { path: '/builder', component: Dashboard },
+  { path: '/builder/:id', component: Editor },
+>>>>>>> origin/main
   { path: '/:pathMatch(.*)*', redirect: '/' }
 ];
 
 export const router = createRouter({
+<<<<<<< HEAD
   history: createWebHashHistory(),
   routes
 });
@@ -50,3 +64,8 @@ router.beforeEach(async (to, _from, next) => {
     next();
   }
 });
+=======
+  history: createWebHistory(),
+  routes
+});
+>>>>>>> origin/main

@@ -10,7 +10,11 @@
           :key="t.id"
           type="button"
           :class="[
+<<<<<<< HEAD
             'no-print overflow-hidden rounded-lg border text-left transition',
+=======
+            'overflow-hidden rounded-lg border text-left transition',
+>>>>>>> origin/main
             resume.design.template === t.id
               ? 'border-brand-500 ring-2 ring-brand-200'
               : 'border-slate-200 hover:border-slate-300'
@@ -145,7 +149,11 @@ export default defineComponent({
     };
   },
   methods: {
+<<<<<<< HEAD
     setDesign(key: keyof Resume['design'], value: string | number | boolean) {
+=======
+    setDesign(key: string, value: string | number | boolean) {
+>>>>>>> origin/main
       this.$emit('update', (r: Resume) => ({
         ...r,
         design: { ...r.design, [key]: value }

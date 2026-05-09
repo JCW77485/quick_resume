@@ -9,6 +9,10 @@
   >
     <div
       class="resume-preview-scale"
+<<<<<<< HEAD
+=======
+      data-print-target
+>>>>>>> origin/main
       :style="{
         transform: printable ? 'none' : `scale(${scale})`,
         transformOrigin: 'top left',
@@ -33,12 +37,15 @@ import ClassicTemplate from '../templates/ClassicTemplate.vue';
 import CompactTemplate from '../templates/CompactTemplate.vue';
 import ModernTemplate from '../templates/ModernTemplate.vue';
 import TwoColumnTemplate from '../templates/TwoColumnTemplate.vue';
+<<<<<<< HEAD
 import PremiumTemplate from '../templates/PremiumTemplate.vue';
 import ExecutiveTemplate from '../templates/ExecutiveTemplate.vue';
 import CreativeTemplate from '../templates/CreativeTemplate.vue';
 import MinimalistTemplate from '../templates/MinimalistTemplate.vue';
 import TechnicalTemplate from '../templates/TechnicalTemplate.vue';
 import PortfolioTemplate from '../templates/PortfolioTemplate.vue';
+=======
+>>>>>>> origin/main
 
 export default defineComponent({
   name: 'ResumePreview',
@@ -47,6 +54,7 @@ export default defineComponent({
     ClassicTemplate,
     CompactTemplate,
     ModernTemplate,
+<<<<<<< HEAD
     TwoColumnTemplate,
     PremiumTemplate,
     ExecutiveTemplate,
@@ -54,6 +62,9 @@ export default defineComponent({
     MinimalistTemplate,
     TechnicalTemplate,
     PortfolioTemplate
+=======
+    TwoColumnTemplate
+>>>>>>> origin/main
   },
   props: {
     resume: { type: Object as () => Resume, required: true },
@@ -73,6 +84,7 @@ export default defineComponent({
         classic: 'ClassicTemplate',
         compact: 'CompactTemplate',
         modern: 'ModernTemplate',
+<<<<<<< HEAD
         twocol: 'TwoColumnTemplate',
         premium: 'PremiumTemplate',
         executive: 'ExecutiveTemplate',
@@ -80,6 +92,9 @@ export default defineComponent({
         minimalist: 'MinimalistTemplate',
         technical: 'TechnicalTemplate',
         portfolio: 'PortfolioTemplate'
+=======
+        twocol: 'TwoColumnTemplate'
+>>>>>>> origin/main
       };
       return map[this.resume.design.template] || 'ClassicTemplate';
     }
