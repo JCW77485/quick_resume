@@ -1,25 +1,25 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.5,
-      color: '#1e293b',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '11in',
-      background: 'white',
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.5,
+              color: '#1e293b',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '11in',
+              background: 'white',
     }"
   >
     <!-- Header with Accent Background -->
     <header
-      :style="{
-        background: accent,
-        color: 'white',
-        padding: '0.6in 0.7in',
-        display: 'flex',
-        alignItems: 'center',
-        gap: '2em',
+      :style="{ overflowWrap: 'anywhere',
+                background: accent,
+                color: 'white',
+                padding: '0.6in 0.7in',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '2em',
       }"
     >
       <div
@@ -62,16 +62,16 @@
           <!-- Section Title with Accent Underline -->
           <div style="margin-bottom: 0.6em; border-bottom: 2px solid #e2e8f0; display: flex; align-items: flex-end; justify-content: space-between;">
             <h2
-              :style="{
-                fontSize: '1.2em',
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: '0.05em',
-                margin: 0,
-                paddingBottom: '0.3em',
-                color: accent,
-                borderBottom: `2px solid ${accent}`,
-                marginBottom: '-2px'
+              :style="{ overflowWrap: 'anywhere',
+                        fontSize: '1.2em',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em',
+                        margin: 0,
+                        paddingBottom: '0.3em',
+                        color: accent,
+                        borderBottom: `2px solid ${accent}`,
+                        marginBottom: '-2px'
               }"
             >
               {{ getSectionTitle(key) }}
@@ -96,7 +96,7 @@
                 <div style="font-weight: 700; font-size: 1.1em; color: #0f172a;">
                   {{ e.role }}
                 </div>
-                <div :style="{ color: accent, fontWeight: 600, fontSize: '0.9em' }">
+                <div :style="{ overflowWrap: 'anywhere', color: accent, fontWeight: 600, fontSize: '0.9em' }">
                   {{ formatDateRange(e.startDate, e.endDate, e.current) }}
                 </div>
               </div>
@@ -158,7 +158,7 @@
                 </div>
                 <div
                   v-if="p.link"
-                  :style="{ color: accent, fontSize: '0.85em', fontWeight: 600 }"
+                  :style="{ overflowWrap: 'anywhere', color: accent, fontSize: '0.85em', fontWeight: 600 }"
                 >
                   {{ p.link }}
                 </div>
@@ -188,7 +188,7 @@
                 :key="g.id"
                 style="min-width: 200px; flex: 1;"
               >
-                <div :style="{ color: accent, fontWeight: 700, fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.2em' }">
+                <div :style="{ overflowWrap: 'anywhere', color: accent, fontWeight: 700, fontSize: '0.85em', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.2em' }">
                   {{ g.category }}
                 </div>
                 <div style="color: #334155; font-weight: 500;">
@@ -225,7 +225,7 @@
                 style="display: flex; align-items: center; gap: 0.6em;"
               >
                 <span style="font-weight: 700; color: #0f172a;">{{ l.name }}</span>
-                <span :style="{ background: `${accent}20`, color: accent, padding: '1px 8px', borderRadius: '12px', fontSize: '0.75em', fontWeight: 700, textTransform: 'uppercase' }">
+                <span :style="{ overflowWrap: 'anywhere', background: `${accent}20`, color: accent, padding: '1px 8px', borderRadius: '12px', fontSize: '0.75em', fontWeight: 700, textTransform: 'uppercase' }">
                   {{ l.level }}
                 </span>
               </div>

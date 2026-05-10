@@ -202,13 +202,22 @@
         <div class="p-6">
           <ul class="space-y-3">
             <li class="flex items-center gap-3 text-sm text-slate-600">
-              <Check class="text-emerald-500" :size="16" /> Unlimited high-quality PDF exports
+              <Check
+                class="text-emerald-500"
+                :size="16"
+              /> Unlimited high-quality PDF exports
             </li>
             <li class="flex items-center gap-3 text-sm text-slate-600">
-              <Check class="text-emerald-500" :size="16" /> Access to all 10 premium templates
+              <Check
+                class="text-emerald-500"
+                :size="16"
+              /> Access to all 10 premium templates
             </li>
             <li class="flex items-center gap-3 text-sm text-slate-600">
-              <Check class="text-emerald-500" :size="16" /> Lifetime access to your resumes
+              <Check
+                class="text-emerald-500"
+                :size="16"
+              /> Lifetime access to your resumes
             </li>
           </ul>
           <div class="mt-8 flex flex-col gap-3">

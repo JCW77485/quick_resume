@@ -1,17 +1,17 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.4,
-      color: '#0f172a',
-      padding: '0.55in 0.7in',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: `${gap}em`,
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.4,
+              color: '#0f172a',
+              padding: '0.55in 0.7in',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: `${gap}em`,
     }"
   >
-    <header :style="{ borderLeft: `5px solid ${accent}`, paddingLeft: '0.75em' }">
+    <header :style="{ overflowWrap: 'anywhere', borderLeft: `5px solid ${accent}`, paddingLeft: '0.75em' }">
       <h1
         style="margin: 0; font-size: 2.1em; font-weight: 800; letter-spacing: -0.01em"
       >
@@ -19,7 +19,7 @@
       </h1>
       <div
         v-if="personal.title"
-        :style="{ color: accent, fontWeight: 600, marginTop: '0.1em' }"
+        :style="{ overflowWrap: 'anywhere', color: accent, fontWeight: 600, marginTop: '0.1em' }"
       >
         {{ personal.title }}
       </div>
@@ -41,7 +41,7 @@
       <section v-if="hasContent(resume, key)">
         <!-- Section Heading -->
         <div style="display: flex; align-items: center; gap: 0.5em; margin-top: 0.9em; margin-bottom: 0.3em">
-          <div :style="{ width: '6px', height: '1em', background: accent, borderRadius: '2px' }" />
+          <div :style="{ overflowWrap: 'anywhere', width: '6px', height: '1em', background: accent, borderRadius: '2px' }" />
           <h2 style="margin: 0; font-size: 1.05em; font-weight: 700; color: #0f172a">
             {{ getSectionTitle(key) }}
           </h2>
@@ -125,7 +125,7 @@
               </div>
               <div
                 v-if="p.link"
-                :style="{ color: accent }"
+                :style="{ overflowWrap: 'anywhere', color: accent }"
               >
                 {{ p.link }}
               </div>

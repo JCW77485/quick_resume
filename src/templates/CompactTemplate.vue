@@ -1,16 +1,16 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.35,
-      color: '#0f172a',
-      padding: '0.55in 0.65in',
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.35,
+              color: '#0f172a',
+              padding: '0.55in 0.65in',
     }"
   >
     <header
       style="display: flex; justify-content: space-between; align-items: flex-end; gap: 1em; border-bottom: 2px solid; padding-bottom: 0.35em"
-      :style="{ borderBottomColor: accent }"
+      :style="{ overflowWrap: 'anywhere', borderBottomColor: accent }"
     >
       <div>
         <h1 style="margin: 0; font-size: 1.7em; font-weight: 700">
@@ -39,13 +39,13 @@
     >
       <section v-if="hasContent(resume, key)">
         <h2
-          :style="{
-            margin: '0.6em 0 0.2em',
-            fontSize: '1em',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            letterSpacing: '0.1em',
-            color: accent,
+          :style="{ overflowWrap: 'anywhere',
+                    margin: '0.6em 0 0.2em',
+                    fontSize: '1em',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    color: accent,
           }"
         >
           {{ getSectionTitle(key) }}

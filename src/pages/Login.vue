@@ -10,10 +10,16 @@
         </p>
       </div>
 
-      <form class="mt-8 space-y-6" @submit.prevent="handleSubmit">
+      <form
+        class="mt-8 space-y-6"
+        @submit.prevent="handleSubmit"
+      >
         <div class="space-y-4 rounded-md shadow-sm">
           <div>
-            <label for="email-address" class="block text-sm font-medium text-slate-700">Email address</label>
+            <label
+              for="email-address"
+              class="block text-sm font-medium text-slate-700"
+            >Email address</label>
             <input
               id="email-address"
               v-model="email"
@@ -22,10 +28,13 @@
               required
               class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-brand-500 sm:text-sm"
               placeholder="you@example.com"
-            />
+            >
           </div>
           <div>
-            <label for="password" class="block text-sm font-medium text-slate-700">Password</label>
+            <label
+              for="password"
+              class="block text-sm font-medium text-slate-700"
+            >Password</label>
             <input
               id="password"
               v-model="password"
@@ -34,11 +43,14 @@
               required
               class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-slate-900 placeholder-slate-400 focus:border-brand-500 focus:outline-none focus:ring-brand-500 sm:text-sm"
               placeholder="••••••••"
-            />
+            >
           </div>
         </div>
 
-        <div v-if="error" class="text-center text-sm font-medium text-red-600">
+        <div
+          v-if="error"
+          class="text-center text-sm font-medium text-red-600"
+        >
           {{ error }}
         </div>
 
