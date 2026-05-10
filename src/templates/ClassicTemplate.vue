@@ -1,24 +1,24 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.4,
-      color: '#111827',
-      padding: '0.6in 0.7in',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: `${gap}em`,
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.4,
+              color: '#111827',
+              padding: '0.6in 0.7in',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: `${gap}em`,
     }"
   >
     <header style="text-align: center">
       <h1
-        :style="{
-          margin: 0,
-          fontSize: '2em',
-          fontWeight: 700,
-          letterSpacing: '0.01em',
-          color: accent,
+        :style="{ overflowWrap: 'anywhere',
+                  margin: 0,
+                  fontSize: '2em',
+                  fontWeight: 700,
+                  letterSpacing: '0.01em',
+                  color: accent,
         }"
       >
         {{ personal.fullName || "Your Name" }}
@@ -48,15 +48,15 @@
         <!-- Section Title -->
         <div style="margin-top: 1em; margin-bottom: 0.35em">
           <h2
-            :style="{
-              fontSize: '1.05em',
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              textTransform: 'uppercase',
-              margin: 0,
-              paddingBottom: '2px',
-              borderBottom: `1.5px solid ${accent}`,
-              color: accent,
+            :style="{ overflowWrap: 'anywhere',
+                      fontSize: '1.05em',
+                      fontWeight: 700,
+                      letterSpacing: '0.06em',
+                      textTransform: 'uppercase',
+                      margin: 0,
+                      paddingBottom: '2px',
+                      borderBottom: `1.5px solid ${accent}`,
+                      color: accent,
             }"
           >
             {{ getSectionTitle(key) }}
@@ -209,11 +209,11 @@
                 style="width: 120px; height: 6px; background: #e5e7eb; border-radius: 4px"
               >
                 <div
-                  :style="{
-                    width: `${levelMap[l.level] || 0}%`,
-                    height: '100%',
-                    background: accent || '#4caf50',
-                    borderRadius: '4px',
+                  :style="{ overflowWrap: 'anywhere',
+                            width: `${levelMap[l.level] || 0}%`,
+                            height: '100%',
+                            background: accent || '#4caf50',
+                            borderRadius: '4px',
                   }"
                 />
               </div>

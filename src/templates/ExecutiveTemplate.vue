@@ -1,25 +1,25 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.6,
-      color: '#1e293b',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '11in',
-      padding: '0.7in 0.8in',
-      background: 'white',
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.6,
+              color: '#1e293b',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '11in',
+              padding: '0.7in 0.8in',
+              background: 'white',
     }"
   >
     <!-- Elegant Centered Header -->
     <header style="text-align: center; border-bottom: 2px solid #334155; padding-bottom: 1.5em; margin-bottom: 1.5em;">
-      <h1 :style="{ margin: 0, fontSize: '2.5em', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.1em' }">
+      <h1 :style="{ overflowWrap: 'anywhere', margin: 0, fontSize: '2.5em', fontWeight: 700, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.1em' }">
         {{ personal.fullName || "Your Name" }}
       </h1>
       <div
         v-if="personal.title"
-        :style="{ marginTop: '0.2em', fontSize: '1.2em', fontWeight: 600, color: accent, textTransform: 'uppercase', letterSpacing: '0.05em' }"
+        :style="{ overflowWrap: 'anywhere', marginTop: '0.2em', fontSize: '1.2em', fontWeight: 600, color: accent, textTransform: 'uppercase', letterSpacing: '0.05em' }"
       >
         {{ personal.title }}
       </div>
@@ -42,14 +42,14 @@
         <section v-if="hasContent(resume, key)">
           <!-- Section Title with Serif Accent -->
           <h2
-            :style="{
-              fontSize: '1.3em',
-              fontWeight: 700,
-              color: '#0f172a',
-              borderLeft: `4px solid ${accent}`,
-              paddingLeft: '0.6em',
-              marginBottom: '0.8em',
-              fontFamily: 'var(--font-serif)'
+            :style="{ overflowWrap: 'anywhere',
+                      fontSize: '1.3em',
+                      fontWeight: 700,
+                      color: '#0f172a',
+                      borderLeft: `4px solid ${accent}`,
+                      paddingLeft: '0.6em',
+                      marginBottom: '0.8em',
+                      fontFamily: 'var(--font-serif)'
             }"
           >
             {{ getSectionTitle(key) }}

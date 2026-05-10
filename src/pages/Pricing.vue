@@ -14,19 +14,29 @@
       <div class="mt-16 grid gap-8 md:grid-cols-2">
         <!-- Free Plan -->
         <div class="flex flex-col rounded-2xl border border-slate-200 bg-white p-8 shadow-sm">
-          <h2 class="text-2xl font-bold text-slate-900">Free</h2>
-          <p class="mt-2 text-slate-600">Get started with building your resume.</p>
+          <h2 class="text-2xl font-bold text-slate-900">
+            Free
+          </h2>
+          <p class="mt-2 text-slate-600">
+            Get started with building your resume.
+          </p>
           <div class="mt-4 flex items-baseline">
             <span class="text-4xl font-bold text-slate-900">$0</span>
             <span class="ml-1 text-slate-500">/forever</span>
           </div>
           <ul class="mt-8 flex-1 space-y-4">
             <li class="flex items-center gap-3 text-slate-700">
-              <Check class="text-emerald-500" :size="18" />
+              <Check
+                class="text-emerald-500"
+                :size="18"
+              />
               Manage unlimited resumes
             </li>
             <li class="flex items-center gap-3 text-slate-700">
-              <Check class="text-emerald-500" :size="18" />
+              <Check
+                class="text-emerald-500"
+                :size="18"
+              />
               Access to all 10 templates
             </li>
             <li class="flex items-center gap-3 text-slate-400">
@@ -48,23 +58,36 @@
           <div class="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-brand-600 px-4 py-1 text-xs font-bold text-white uppercase tracking-wider">
             Most Popular
           </div>
-          <h2 class="text-2xl font-bold text-slate-900">Pro</h2>
-          <p class="mt-2 text-slate-600">Perfect for serious job seekers.</p>
+          <h2 class="text-2xl font-bold text-slate-900">
+            Pro
+          </h2>
+          <p class="mt-2 text-slate-600">
+            Perfect for serious job seekers.
+          </p>
           <div class="mt-4 flex items-baseline">
             <span class="text-4xl font-bold text-slate-900">$10</span>
             <span class="ml-1 text-slate-500">/one-time</span>
           </div>
           <ul class="mt-8 flex-1 space-y-4">
             <li class="flex items-center gap-3 text-slate-700">
-              <Check class="text-emerald-500" :size="18" />
+              <Check
+                class="text-emerald-500"
+                :size="18"
+              />
               Everything in Free
             </li>
             <li class="flex items-center gap-3 text-slate-700">
-              <Check class="text-emerald-500" :size="18" />
+              <Check
+                class="text-emerald-500"
+                :size="18"
+              />
               Unlimited PDF downloads
             </li>
             <li class="flex items-center gap-3 text-slate-700">
-              <Check class="text-emerald-500" :size="18" />
+              <Check
+                class="text-emerald-500"
+                :size="18"
+              />
               Priority support
             </li>
           </ul>

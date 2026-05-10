@@ -1,26 +1,26 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.4,
-      color: '#1e293b',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '11in',
-      padding: '0.6in 0.7in',
-      background: 'white',
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.4,
+              color: '#1e293b',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '11in',
+              padding: '0.6in 0.7in',
+              background: 'white',
     }"
   >
     <!-- Technical Header -->
     <header style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #0f172a; padding-bottom: 1em; margin-bottom: 1.5em;">
       <div>
-        <h1 :style="{ margin: 0, fontSize: '2.4em', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }">
+        <h1 :style="{ overflowWrap: 'anywhere', margin: 0, fontSize: '2.4em', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.02em' }">
           {{ personal.fullName || "Your Name" }}
         </h1>
         <div
           v-if="personal.title"
-          :style="{ marginTop: '0.1em', fontSize: '1.2em', fontWeight: 600, color: accent }"
+          :style="{ overflowWrap: 'anywhere', marginTop: '0.1em', fontSize: '1.2em', fontWeight: 600, color: accent }"
         >
           {{ personal.title }}
         </div>
@@ -38,7 +38,7 @@
     <div style="display: flex; flex-direction: column; gap: 1.5em; flex: 1;">
       <!-- Special Technical Skills Section -->
       <section v-if="hasContent(resume, 'skills')">
-        <h2 :style="{ fontSize: '1.1em', fontWeight: 800, color: 'white', background: '#0f172a', padding: '4px 12px', display: 'inline-block', marginBottom: '0.8em', borderRadius: '2px' }">
+        <h2 :style="{ overflowWrap: 'anywhere', fontSize: '1.1em', fontWeight: 800, color: 'white', background: '#0f172a', padding: '4px 12px', display: 'inline-block', marginBottom: '0.8em', borderRadius: '2px' }">
           TECHNICAL SKILLS
         </h2>
         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8em 2em;">
@@ -57,7 +57,7 @@
         :key="key"
       >
         <section v-if="hasContent(resume, key)">
-          <h2 :style="{ fontSize: '1.15em', fontWeight: 800, color: '#0f172a', borderBottom: `2px solid #e2e8f0`, paddingBottom: '2px', marginBottom: '0.8em', textTransform: 'uppercase' }">
+          <h2 :style="{ overflowWrap: 'anywhere', fontSize: '1.15em', fontWeight: 800, color: '#0f172a', borderBottom: `2px solid #e2e8f0`, paddingBottom: '2px', marginBottom: '0.8em', textTransform: 'uppercase' }">
             {{ getSectionTitle(key) }}
           </h2>
 
@@ -116,7 +116,7 @@
                 </div>
                 <div
                   v-if="p.link"
-                  :style="{ color: accent, fontSize: '0.85em', fontWeight: 600 }"
+                  :style="{ overflowWrap: 'anywhere', color: accent, fontSize: '0.85em', fontWeight: 600 }"
                 >
                   {{ p.link }}
                 </div>

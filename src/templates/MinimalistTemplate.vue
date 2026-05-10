@@ -1,25 +1,25 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.5,
-      color: '#334155',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '11in',
-      padding: '0.8in 0.9in',
-      background: 'white',
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.5,
+              color: '#334155',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '11in',
+              padding: '0.8in 0.9in',
+              background: 'white',
     }"
   >
     <!-- Ultra-Clean Header -->
     <header style="margin-bottom: 3em;">
-      <h1 :style="{ margin: 0, fontSize: '2.4em', fontWeight: 300, color: '#0f172a', letterSpacing: '0.05em' }">
+      <h1 :style="{ overflowWrap: 'anywhere', margin: 0, fontSize: '2.4em', fontWeight: 300, color: '#0f172a', letterSpacing: '0.05em' }">
         <span style="font-weight: 700;">{{ firstName }}</span> {{ lastName }}
       </h1>
       <div
         v-if="personal.title"
-        :style="{ marginTop: '0.2em', fontSize: '1.1em', color: accent, fontWeight: 500, letterSpacing: '0.02em' }"
+        :style="{ overflowWrap: 'anywhere', marginTop: '0.2em', fontSize: '1.1em', color: accent, fontWeight: 500, letterSpacing: '0.02em' }"
       >
         {{ personal.title }}
       </div>
@@ -42,14 +42,14 @@
         <section v-if="hasContent(resume, key)">
           <div style="display: grid; grid-template-columns: 1.5in 1fr; gap: 2em;">
             <h2
-              :style="{
-                fontSize: '0.85em',
-                fontWeight: 700,
-                color: '#94a3b8',
-                textTransform: 'uppercase',
-                letterSpacing: '0.15em',
-                margin: 0,
-                marginTop: '0.4em'
+              :style="{ overflowWrap: 'anywhere',
+                        fontSize: '0.85em',
+                        fontWeight: 700,
+                        color: '#94a3b8',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.15em',
+                        margin: 0,
+                        marginTop: '0.4em'
               }"
             >
               {{ getSectionTitle(key) }}

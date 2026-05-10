@@ -1,25 +1,25 @@
 <template>
   <div
-    :style="{
-      fontFamily,
-      fontSize: `${fontPx}pt`,
-      lineHeight: 1.5,
-      color: '#0f172a',
-      display: 'flex',
-      flexDirection: 'column',
-      minHeight: '11in',
-      background: '#f8fafc',
+    :style="{ overflowWrap: 'anywhere',
+              fontFamily,
+              fontSize: `${fontPx}pt`,
+              lineHeight: 1.5,
+              color: '#0f172a',
+              display: 'flex',
+              flexDirection: 'column',
+              minHeight: '11in',
+              background: '#f8fafc',
     }"
   >
     <!-- Visual Impact Header -->
-    <header :style="{ background: '#0f172a', color: 'white', padding: '0.6in 0.7in', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }">
+    <header :style="{ overflowWrap: 'anywhere', background: '#0f172a', color: 'white', padding: '0.6in 0.7in', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }">
       <div style="flex: 1;">
-        <h1 :style="{ margin: 0, fontSize: '3em', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }">
+        <h1 :style="{ overflowWrap: 'anywhere', margin: 0, fontSize: '3em', fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1 }">
           {{ personal.fullName || "Your Name" }}
         </h1>
         <div
           v-if="personal.title"
-          :style="{ marginTop: '0.4em', fontSize: '1.4em', fontWeight: 600, color: accent }"
+          :style="{ overflowWrap: 'anywhere', marginTop: '0.4em', fontSize: '1.4em', fontWeight: 600, color: accent }"
         >
           {{ personal.title }}
         </div>
@@ -51,7 +51,7 @@
           :key="key"
         >
           <section v-if="hasContent(resume, key)">
-            <h2 :style="{ fontSize: '1.4em', fontWeight: 800, color: '#0f172a', marginBottom: '1em', borderLeft: `6px solid ${accent}`, paddingLeft: '0.5em' }">
+            <h2 :style="{ overflowWrap: 'anywhere', fontSize: '1.4em', fontWeight: 800, color: '#0f172a', marginBottom: '1em', borderLeft: `6px solid ${accent}`, paddingLeft: '0.5em' }">
               {{ getSectionTitle(key) }}
             </h2>
 
@@ -101,7 +101,7 @@
                   </div>
                   <div
                     v-if="p.link"
-                    :style="{ color: accent, fontSize: '0.85em', margin: '4px 0 8px', fontWeight: 600 }"
+                    :style="{ overflowWrap: 'anywhere', color: accent, fontSize: '0.85em', margin: '4px 0 8px', fontWeight: 600 }"
                   >
                     {{ p.link }}
                   </div>
@@ -122,7 +122,7 @@
           :key="key"
         >
           <section v-if="hasContent(resume, key)">
-            <h2 :style="{ fontSize: '1.1em', fontWeight: 800, color: '#0f172a', marginBottom: '1em', textTransform: 'uppercase', letterSpacing: '0.05em' }">
+            <h2 :style="{ overflowWrap: 'anywhere', fontSize: '1.1em', fontWeight: 800, color: '#0f172a', marginBottom: '1em', textTransform: 'uppercase', letterSpacing: '0.05em' }">
               {{ getSectionTitle(key) }}
             </h2>
 
@@ -132,7 +132,7 @@
                   v-for="g in resume.skills"
                   :key="g.id"
                 >
-                  <div :style="{ color: accent, fontWeight: 700, fontSize: '0.8em', textTransform: 'uppercase', marginBottom: '4px' }">
+                  <div :style="{ overflowWrap: 'anywhere', color: accent, fontWeight: 700, fontSize: '0.8em', textTransform: 'uppercase', marginBottom: '4px' }">
                     {{ g.category }}
                   </div>
                   <div style="font-weight: 600; color: #334155; font-size: 0.95em;">
