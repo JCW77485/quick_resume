@@ -9,7 +9,6 @@
   >
     <div
       class="resume-preview-scale"
-      data-print-target
       :style="{
         transform: printable ? 'none' : `scale(${scale})`,
         transformOrigin: 'top left',
@@ -34,6 +33,12 @@ import ClassicTemplate from '../templates/ClassicTemplate.vue';
 import CompactTemplate from '../templates/CompactTemplate.vue';
 import ModernTemplate from '../templates/ModernTemplate.vue';
 import TwoColumnTemplate from '../templates/TwoColumnTemplate.vue';
+import PremiumTemplate from '../templates/PremiumTemplate.vue';
+import ExecutiveTemplate from '../templates/ExecutiveTemplate.vue';
+import CreativeTemplate from '../templates/CreativeTemplate.vue';
+import MinimalistTemplate from '../templates/MinimalistTemplate.vue';
+import TechnicalTemplate from '../templates/TechnicalTemplate.vue';
+import PortfolioTemplate from '../templates/PortfolioTemplate.vue';
 
 export default defineComponent({
   name: 'ResumePreview',
@@ -42,7 +47,13 @@ export default defineComponent({
     ClassicTemplate,
     CompactTemplate,
     ModernTemplate,
-    TwoColumnTemplate
+    TwoColumnTemplate,
+    PremiumTemplate,
+    ExecutiveTemplate,
+    CreativeTemplate,
+    MinimalistTemplate,
+    TechnicalTemplate,
+    PortfolioTemplate
   },
   props: {
     resume: { type: Object as () => Resume, required: true },
@@ -62,7 +73,13 @@ export default defineComponent({
         classic: 'ClassicTemplate',
         compact: 'CompactTemplate',
         modern: 'ModernTemplate',
-        twocol: 'TwoColumnTemplate'
+        twocol: 'TwoColumnTemplate',
+        premium: 'PremiumTemplate',
+        executive: 'ExecutiveTemplate',
+        creative: 'CreativeTemplate',
+        minimalist: 'MinimalistTemplate',
+        technical: 'TechnicalTemplate',
+        portfolio: 'PortfolioTemplate'
       };
       return map[this.resume.design.template] || 'ClassicTemplate';
     }

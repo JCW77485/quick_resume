@@ -24,12 +24,32 @@
           <span :class="linkClass(isActive)">My Resumes</span>
         </router-link>
       </nav>
-      <router-link
-        to="/builder"
-        class="hidden rounded-md bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700 md:inline-flex"
-      >
-        Get started
-      </router-link>
+      <div class="flex items-center gap-3">
+        <template v-if="auth.user">
+          <router-link
+            v-if="!auth.isPro"
+            to="/pricing"
+            class="text-xs font-bold text-amber-600 hover:text-amber-700"
+          >
+            Upgrade to Pro
+          </router-link>
+          <button
+            type="button"
+            class="text-sm font-medium text-slate-600 hover:text-slate-900"
+            @click="handleLogout"
+          >
+            Sign out
+          </button>
+        </template>
+        <template v-else>
+          <router-link
+            to="/login"
+            class="rounded-md bg-brand-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-brand-700 md:inline-flex"
+          >
+            Get started
+          </router-link>
+        </template>
+      </div>
     </div>
   </header>
 </template>
@@ -37,13 +57,21 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import { FileText } from 'lucide-vue-next';
+import { useAuth } from '../store/auth';
 
 export default defineComponent({
   name: 'Navbar',
   components: {
     FileText
   },
+  computed: {
+    auth() { return useAuth(); }
+  },
   methods: {
+    async handleLogout() {
+      await this.auth.logout();
+      this.$router.push('/');
+    },
     linkClass(isActive: boolean) {
       return "text-sm font-medium transition-colors cursor-pointer " +
         (isActive ? "text-brand-700" : "text-slate-600 hover:text-slate-900");

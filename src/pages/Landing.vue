@@ -78,7 +78,7 @@
               Pick a template, make it yours
             </h2>
             <p class="mt-2 text-slate-600">
-              Four professional layouts, all customizable — colors, fonts, and spacing.
+              Ten professional layouts, all customizable — colors, fonts, and spacing.
             </p>
           </div>
           <router-link

@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 import type { Resume, SectionKey } from "../types/resume";
 import { emptyResume, sampleResume } from "../lib/defaults";
 import { uid } from "../lib/uid";
+import { useAuth } from "./auth";
 
 interface ResumesState {
   resumes: Record<string, Resume>;
@@ -13,6 +15,7 @@ function touch(r: Resume): Resume {
 }
 
 const STORAGE_KEY = "quickresume:v1";
+const API_URL = '/api/index.php';
 
 export const useResumes = defineStore("resumes", {
   state: (): ResumesState => {
@@ -35,7 +38,26 @@ export const useResumes = defineStore("resumes", {
   },
 
   actions: {
-    persist() {
+    async fetchResumes() {
+      const auth = useAuth();
+      if (!auth.user) return;
+      try {
+        const res = await axios.get(`${API_URL}/resumes?user_id=${auth.user.id}`);
+        const remoteResumes = res.data;
+        remoteResumes.forEach((r: {id:string, name:string, data:string, updated_at:string}) => {
+           const resumeData = JSON.parse(r.data);
+           this.resumes[r.id] = { ...resumeData, id: r.id, name: r.name, updatedAt: Number(r.updated_at) };
+           if (!this.order.includes(r.id)) {
+              this.order.push(r.id);
+           }
+        });
+        this.persist();
+      } catch (e) {
+        console.error("Failed to fetch resumes", e);
+      }
+    },
+
+    async persist(resumeId?: string) {
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({
@@ -46,6 +68,25 @@ export const useResumes = defineStore("resumes", {
           version: 1,
         })
       );
+
+      const auth = useAuth();
+      if (auth.user && resumeId) {
+          const r = this.resumes[resumeId];
+          if (r) {
+              try {
+                  await axios.post(`${API_URL}/resumes`, {
+                      id: r.id,
+                      user_id: auth.user.id,
+                      name: r.name,
+                      data: r,
+                      created_at: r.createdAt,
+                      updated_at: r.updatedAt
+                  });
+              } catch (e) {
+                  console.error("Failed to sync resume to DB", e);
+              }
+          }
+      }
     },
 
     createResume(name?: string, template?: Resume["design"]["template"]) {
@@ -53,7 +94,7 @@ export const useResumes = defineStore("resumes", {
       if (template) r.design.template = template;
       this.resumes[r.id] = r;
       this.order.unshift(r.id);
-      this.persist();
+      this.persist(r.id);
       return r.id;
     },
 
@@ -62,7 +103,7 @@ export const useResumes = defineStore("resumes", {
       r.name = `Sample Resume ${this.order.length + 1}`;
       this.resumes[r.id] = r;
       this.order.unshift(r.id);
-      this.persist();
+      this.persist(r.id);
       return r.id;
     },
 
@@ -78,7 +119,7 @@ export const useResumes = defineStore("resumes", {
       };
       this.resumes[copy.id] = copy;
       this.order.unshift(copy.id);
-      this.persist();
+      this.persist(copy.id);
       return copy.id;
     },
 
@@ -86,34 +127,35 @@ export const useResumes = defineStore("resumes", {
       delete this.resumes[id];
       this.order = this.order.filter((x) => x !== id);
       this.persist();
+      // Add API delete call here if needed
     },
 
     renameResume(id: string, name: string) {
       const r = this.resumes[id];
       if (!r) return;
       this.resumes[id] = touch({ ...r, name });
-      this.persist();
+      this.persist(id);
     },
 
     updateResume(id: string, updater: (r: Resume) => Resume) {
       const r = this.resumes[id];
       if (!r) return;
       this.resumes[id] = touch(updater(r));
-      this.persist();
+      this.persist(id);
     },
 
     addSection(id: string, key: SectionKey) {
       const r = this.resumes[id];
       if (!r || r.sections.includes(key)) return;
       this.resumes[id] = touch({ ...r, sections: [...r.sections, key] });
-      this.persist();
+      this.persist(id);
     },
 
     removeSection(id: string, key: SectionKey) {
       const r = this.resumes[id];
       if (!r) return;
       this.resumes[id] = touch({ ...r, sections: r.sections.filter((k) => k !== key) });
-      this.persist();
+      this.persist(id);
     },
   },
 });
