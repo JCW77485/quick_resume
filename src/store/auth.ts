@@ -1,7 +1,12 @@
 import { defineStore } from "pinia";
-import { onAuthStateChanged, type User } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { auth, db } from "../lib/firebase";
+import axios from "axios";
+
+interface User {
+  id: string;
+  email: string;
+  is_pro: boolean;
+  is_admin: boolean;
+}
 
 interface AuthState {
   user: User | null;
@@ -10,6 +15,8 @@ interface AuthState {
   loading: boolean;
   initialized: boolean;
 }
+
+const API_URL = '/api/index.php';
 
 export const useAuth = defineStore("auth", {
   state: (): AuthState => ({
@@ -23,45 +30,41 @@ export const useAuth = defineStore("auth", {
   actions: {
     async init() {
       if (this.initialized) return;
-
-      return new Promise<void>((resolve) => {
-        onAuthStateChanged(auth, async (user) => {
-          this.user = user;
-          if (user) {
-            await this.checkSubscription(user.uid);
-          } else {
-            this.isPro = false;
-          }
-          this.loading = false;
-          this.initialized = true;
-          resolve();
-        });
-      });
+      const savedUser = localStorage.getItem('qr_user');
+      if (savedUser) {
+        this.user = JSON.parse(savedUser);
+        this.isPro = !!this.user?.is_pro;
+        this.isAdmin = !!this.user?.is_admin;
+      }
+      this.loading = false;
+      this.initialized = true;
     },
 
-    async checkSubscription(uid: string) {
-      try {
-        const userDoc = await getDoc(doc(db, "users", uid));
-        if (userDoc.exists()) {
-          const data = userDoc.data();
-          this.isPro = data.isPro || false;
-          this.isAdmin = data.isAdmin || false;
-        } else {
-          this.isPro = false;
-          this.isAdmin = false;
-        }
-      } catch (error) {
-        console.error("Error checking subscription:", error);
-        this.isPro = false;
-        this.isAdmin = false;
+    async login(email: string, pass: string) {
+      const res = await axios.post(`${API_URL}/auth/login`, { email, password: pass });
+      if (res.data.success) {
+        this.user = res.data.user;
+        this.isPro = !!this.user?.is_pro;
+        this.isAdmin = !!this.user?.is_admin;
+        localStorage.setItem('qr_user', JSON.stringify(this.user));
+        return true;
       }
+      throw new Error(res.data.error || 'Login failed');
+    },
+
+    async signup(email: string, pass: string) {
+        const res = await axios.post(`${API_URL}/auth/signup`, { email, password: pass });
+        if (res.data.success) {
+            return this.login(email, pass);
+        }
+        throw new Error(res.data.error || 'Signup failed');
     },
 
     async logout() {
-      await auth.signOut();
       this.user = null;
       this.isPro = false;
       this.isAdmin = false;
+      localStorage.removeItem('qr_user');
     }
   },
 });

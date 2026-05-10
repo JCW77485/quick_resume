@@ -68,11 +68,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import {
-  signInWithEmailAndPassword,
-  createUserWithEmailAndPassword
-} from 'firebase/auth';
-import { auth } from '../lib/firebase';
+import { useAuth } from '../store/auth';
 
 export default defineComponent({
   name: 'Login',
@@ -89,11 +85,12 @@ export default defineComponent({
     async handleSubmit() {
       this.loading = true;
       this.error = '';
+      const auth = useAuth();
       try {
         if (this.isSignup) {
-          await createUserWithEmailAndPassword(auth, this.email, this.password);
+          await auth.signup(this.email, this.password);
         } else {
-          await signInWithEmailAndPassword(auth, this.email, this.password);
+          await auth.login(this.email, this.password);
         }
         this.$router.push('/builder');
       } catch (e: unknown) {

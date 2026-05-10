@@ -1,10 +1,10 @@
 <template>
   <div
-    :data-print-target="printable ? 'true' : undefined"
+    :data-print-target="printable ? true : undefined"
     :class="['bg-white shadow-md', className]"
     :style="{
       width: '8.5in',
-      minHeight: printable ? 'auto' : '11in',
+      minHeight: '11in',
       margin: '0 auto',
       boxSizing: 'border-box',
       overflow: printable ? 'visible' : 'hidden',

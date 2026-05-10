@@ -21,7 +21,7 @@
     class="flex h-screen flex-col bg-slate-100"
   >
     <!-- Top bar -->
-    <header class="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-2">
+    <header class="no-print flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-2">
       <button
         type="button"
         class="inline-flex items-center gap-1 rounded-md px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900"
@@ -34,7 +34,7 @@
         <template v-if="editingName">
           <input
             v-model="nameDraft"
-            autoFocus
+            autofocus
             class="w-64 rounded-md border border-slate-300 px-2 py-1 text-sm font-semibold text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
             @blur="saveName"
             @keydown.enter="saveName"
@@ -77,7 +77,7 @@
     <!-- Body -->
     <div class="flex min-h-0 flex-1">
       <!-- Left panel -->
-      <aside class="flex w-full max-w-xl shrink-0 flex-col border-r border-slate-200 bg-slate-50 lg:w-[44%]">
+      <aside class="no-print flex w-full max-w-xl shrink-0 flex-col border-r border-slate-200 bg-slate-50 lg:w-[44%]">
         <div class="flex shrink-0 items-center gap-1 border-b border-slate-200 bg-white px-2 py-2">
           <button
             type="button"
@@ -154,17 +154,90 @@
         ref="previewContainer"
         class="scroll-thin relative min-w-0 flex-1 overflow-auto"
       >
-        <div class="sticky top-0 z-10 flex items-center justify-end gap-2 border-b border-slate-200 bg-slate-50/90 px-4 py-2 backdrop-blur">
+        <div class="no-print sticky top-0 z-10 flex items-center justify-end gap-2 border-b border-slate-200 bg-slate-50/90 px-4 py-2 backdrop-blur">
           <!-- Zoom controls could go here -->
         </div>
         <div class="flex justify-center p-6">
           <ResumePreview
+            id="main-resume-preview"
+            class="no-print"
             :resume="resume"
             :scale="scale"
-            printable
           />
+          <!-- Hidden printable version -->
+          <div class="print:block hidden">
+            <ResumePreview
+              :resume="resume"
+              :printable="true"
+            />
+          </div>
         </div>
       </section>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div
+      v-if="showUpgradeModal"
+      class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
+    >
+      <div class="w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div class="relative bg-brand-600 p-8 text-center text-white">
+          <button
+            type="button"
+            class="absolute top-4 right-4 text-white/80 hover:text-white"
+            @click="showUpgradeModal = false"
+          >
+            <X :size="20" />
+          </button>
+          <div class="mx-auto mb-4 grid h-16 w-16 place-items-center rounded-full bg-white/20">
+            <Crown :size="32" />
+          </div>
+          <h3 class="text-2xl font-bold">
+            {{ !auth.user ? 'Sign in to Download' : 'Unlock PDF Downloads' }}
+          </h3>
+          <p class="mt-2 text-brand-100">
+            {{ !auth.user ? 'Create an account to save and download your resume.' : 'Upgrade to Pro to download and print your professional resumes.' }}
+          </p>
+        </div>
+        <div class="p-6">
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm text-slate-600">
+              <Check class="text-emerald-500" :size="16" /> Unlimited high-quality PDF exports
+            </li>
+            <li class="flex items-center gap-3 text-sm text-slate-600">
+              <Check class="text-emerald-500" :size="16" /> Access to all 10 premium templates
+            </li>
+            <li class="flex items-center gap-3 text-sm text-slate-600">
+              <Check class="text-emerald-500" :size="16" /> Lifetime access to your resumes
+            </li>
+          </ul>
+          <div class="mt-8 flex flex-col gap-3">
+            <button
+              v-if="!auth.user"
+              type="button"
+              class="w-full rounded-xl bg-brand-600 py-3 text-sm font-bold text-white shadow-lg shadow-brand-200 transition hover:bg-brand-700 active:scale-[0.98]"
+              @click="$router.push('/login')"
+            >
+              Sign up free
+            </button>
+            <button
+              v-else
+              type="button"
+              class="w-full rounded-xl bg-brand-600 py-3 text-sm font-bold text-white shadow-lg shadow-brand-200 transition hover:bg-brand-700 active:scale-[0.98]"
+              @click="$router.push('/pricing')"
+            >
+              Upgrade for $10
+            </button>
+            <button
+              type="button"
+              class="w-full py-2 text-sm font-medium text-slate-500 hover:text-slate-700"
+              @click="showUpgradeModal = false"
+            >
+              Maybe later
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -173,6 +246,8 @@
 import { defineComponent } from 'vue';
 import {
   ArrowLeft,
+  Crown,
+  X,
   Check,
   Download,
   FileText,
@@ -182,6 +257,7 @@ import {
   Plus,
 } from 'lucide-vue-next';
 import { SECTION_LABELS, useResumes } from '../store/resumes';
+import { useAuth } from '../store/auth';
 import type { Resume, SectionKey } from '../types/resume';
 import ResumePreview from '../components/ResumePreview.vue';
 import PersonalSection from '../components/form/sections/PersonalSection.vue';
@@ -218,6 +294,8 @@ export default defineComponent({
     LanguagesSection,
     DesignPanel,
     ArrowLeft,
+    Crown,
+    X,
     Check,
     Download,
     FileText,
@@ -234,6 +312,7 @@ export default defineComponent({
       scale: 0.72,
       savedAt: null as number | null,
       resizeObserver: null as ResizeObserver | null,
+      showUpgradeModal: false,
       SECTION_LABELS
     };
   },
@@ -242,6 +321,7 @@ export default defineComponent({
     resume(): Resume | undefined {
       return useResumes().resumes[this.id];
     },
+    auth() { return useAuth(); },
     availableSections(): SectionKey[] {
       if (!this.resume) return [];
       return SECTION_ORDER.filter((k) => !this.resume!.sections.includes(k));
@@ -307,32 +387,11 @@ export default defineComponent({
       return map[key];
     },
     print() {
-      const printTarget = document.querySelector('[data-print-target]') as HTMLElement;
-      if (!printTarget) return;
-
-      const styles = Array.from(document.styleSheets)
-        .flatMap(sheet => {
-          try {
-            return Array.from(sheet.cssRules).map(rule => rule.cssText);
-          } catch {
-            return [];
-          }
-        });
-
-      const iframe = document.createElement('iframe');
-      iframe.style.cssText = 'position:fixed;top:0;left:0;width:0;height:0;border:none;';
-      document.body.appendChild(iframe);
-
-      const doc = iframe.contentDocument!;
-      doc.open();
-      doc.write(`<!DOCTYPE html><html><head><style>${styles.join('\n')}@page { size: Letter; margin: 0; } body { margin: 0; padding: 0; }</style></head><body>${printTarget.innerHTML}</body></html>`);
-      doc.close();
-
-      iframe.onload = () => {
-        iframe.contentWindow!.focus();
-        iframe.contentWindow!.print();
-        setTimeout(() => document.body.removeChild(iframe), 1000);
-      };
+      if (!this.auth.user || !this.auth.isPro) {
+        this.showUpgradeModal = true;
+        return;
+      }
+      window.print();
     }
   }
 });
