@@ -5,11 +5,17 @@ import { emptyResume, sampleResume } from "../lib/defaults";
 import { uid } from "../lib/uid";
 import { useAuth } from "./auth";
 
+/**
+ * ResumesState interface for Pinia store.
+ */
 interface ResumesState {
   resumes: Record<string, Resume>;
-  order: string[];
+  order: string[]; // List of resume IDs in display order
 }
 
+/**
+ * Helper to update the updatedAt timestamp on a resume object.
+ */
 function touch(r: Resume): Resume {
   return { ...r, updatedAt: Date.now() };
 }
@@ -17,8 +23,13 @@ function touch(r: Resume): Resume {
 const STORAGE_KEY = "quickresume:v1";
 const API_URL = '/api/index.php';
 
+/**
+ * Resumes Store
+ * Handles resume creation, updates, deletions, and synchronization with LocalStorage and PHP/MySQL.
+ */
 export const useResumes = defineStore("resumes", {
   state: (): ResumesState => {
+    // Initial state: attempt to load from local storage
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
@@ -38,12 +49,20 @@ export const useResumes = defineStore("resumes", {
   },
 
   actions: {
+    /**
+     * Fetches resumes from the database for the authenticated user.
+     */
     async fetchResumes() {
       const auth = useAuth();
       if (!auth.user) return;
       try {
-        const res = await axios.get(`${API_URL}/resumes?user_id=${auth.user.id}`);
+        const res = await axios.get(`${API_URL}/resumes`);
         const remoteResumes = res.data;
+
+        // Error handling for unauthorized or empty response
+        if (remoteResumes.error) return;
+
+        // Merge remote resumes into local state
         remoteResumes.forEach((r: {id:string, name:string, data:string, updated_at:string}) => {
            const resumeData = JSON.parse(r.data);
            this.resumes[r.id] = { ...resumeData, id: r.id, name: r.name, updatedAt: Number(r.updated_at) };
@@ -57,6 +76,9 @@ export const useResumes = defineStore("resumes", {
       }
     },
 
+    /**
+     * Persists current state to LocalStorage and optionally syncs a specific resume to the database.
+     */
     async persist(resumeId?: string) {
       localStorage.setItem(
         STORAGE_KEY,
@@ -74,9 +96,9 @@ export const useResumes = defineStore("resumes", {
           const r = this.resumes[resumeId];
           if (r) {
               try {
+                  // Sync resume data to PHP backend
                   await axios.post(`${API_URL}/resumes`, {
                       id: r.id,
-                      user_id: auth.user.id,
                       name: r.name,
                       data: r,
                       created_at: r.createdAt,
@@ -89,6 +111,9 @@ export const useResumes = defineStore("resumes", {
       }
     },
 
+    /**
+     * Creates a new empty resume.
+     */
     createResume(name?: string, template?: Resume["design"]["template"]) {
       const r = emptyResume(name || `Resume ${this.order.length + 1}`);
       if (template) r.design.template = template;
@@ -98,6 +123,9 @@ export const useResumes = defineStore("resumes", {
       return r.id;
     },
 
+    /**
+     * Creates a resume pre-filled with sample data.
+     */
     createSampleResume() {
       const r = sampleResume();
       r.name = `Sample Resume ${this.order.length + 1}`;
@@ -107,6 +135,9 @@ export const useResumes = defineStore("resumes", {
       return r.id;
     },
 
+    /**
+     * Creates a copy of an existing resume.
+     */
     duplicateResume(id: string) {
       const src = this.resumes[id];
       if (!src) return null;
@@ -123,11 +154,13 @@ export const useResumes = defineStore("resumes", {
       return copy.id;
     },
 
+    /**
+     * Deletes a resume from local state and LocalStorage.
+     */
     deleteResume(id: string) {
       delete this.resumes[id];
       this.order = this.order.filter((x) => x !== id);
       this.persist();
-      // Add API delete call here if needed
     },
 
     renameResume(id: string, name: string) {
@@ -137,6 +170,9 @@ export const useResumes = defineStore("resumes", {
       this.persist(id);
     },
 
+    /**
+     * Universal update method for modifying resume content.
+     */
     updateResume(id: string, updater: (r: Resume) => Resume) {
       const r = this.resumes[id];
       if (!r) return;
@@ -160,6 +196,9 @@ export const useResumes = defineStore("resumes", {
   },
 });
 
+/**
+ * Display labels for different resume sections.
+ */
 export const SECTION_LABELS: Record<SectionKey, string> = {
   summary: "Professional Summary",
   experience: "Work Experience",

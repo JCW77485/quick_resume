@@ -2,6 +2,10 @@
   <div class="flex min-h-full flex-col bg-slate-50">
     <Navbar />
     <main class="mx-auto w-full max-w-6xl flex-1 px-4 py-10">
+      <div v-if="paymentStatus" :class="['mb-6 p-4 rounded-lg text-sm font-medium', paymentStatus === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200']">
+        {{ paymentStatus === 'success' ? 'Payment successful! You are now a Pro user.' : 'Payment verification failed. Please contact support.' }}
+      </div>
+
       <div class="mb-8 flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 class="text-3xl font-bold tracking-tight text-slate-900">
@@ -155,6 +159,7 @@ import Navbar from '../components/Navbar.vue';
 import AppFooter from '../components/AppFooter.vue';
 import ResumePreview from '../components/ResumePreview.vue';
 import { useResumes } from '../store/resumes';
+import { useAuth } from '../store/auth';
 
 export default defineComponent({
   name: 'Dashboard',
@@ -169,12 +174,26 @@ export default defineComponent({
   },
   data() {
     return {
-      confirmId: null as string | null
+      confirmId: null as string | null,
+      paymentStatus: null as 'success' | 'fail' | null
     };
   },
   computed: {
     resumes() { return useResumes().resumes; },
     order() { return useResumes().order; }
+  },
+  async mounted() {
+    const sessionId = this.$route.query.session_id as string;
+    if (sessionId) {
+        const auth = useAuth();
+        const success = await auth.verifyPayment(sessionId);
+        this.paymentStatus = success ? 'success' : 'fail';
+        // Clean URL
+        this.$router.replace({ query: {} });
+    }
+
+    // Fetch resumes if logged in
+    useResumes().fetchResumes();
   },
   methods: {
     createNew() {

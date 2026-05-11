@@ -23,7 +23,7 @@
                 Total Users
               </div>
               <div class="text-2xl font-bold text-slate-900">
-                {{ users.length }}
+                {{ stats.totalUsers }}
               </div>
             </div>
           </div>
@@ -38,7 +38,7 @@
                 Total Revenue
               </div>
               <div class="text-2xl font-bold text-slate-900">
-                ${{ totalRevenue }}
+                ${{ stats.totalSales }}
               </div>
             </div>
           </div>
@@ -50,10 +50,10 @@
             </div>
             <div>
               <div class="text-sm font-medium text-slate-500">
-                Sales This Month
+                Total Resumes
               </div>
               <div class="text-2xl font-bold text-slate-900">
-                {{ monthlySales }}
+                {{ stats.totalResumes }}
               </div>
             </div>
           </div>
@@ -80,13 +80,17 @@
         <div class="lg:col-span-2 space-y-8">
           <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <h3 class="mb-6 text-lg font-bold text-slate-900">
-              Sales Over Time
+              Sales History (Last 7 Days)
             </h3>
             <div class="h-[300px]">
               <LineChart
+                v-if="chartData.labels.length > 0"
                 :data="chartData"
                 :options="chartOptions"
               />
+              <div v-else class="flex h-full items-center justify-center text-slate-400">
+                No sales data available.
+              </div>
             </div>
           </div>
 
@@ -117,7 +121,7 @@
                 </thead>
                 <tbody class="divide-y divide-slate-200 bg-white">
                   <tr
-                    v-for="user in users"
+                    v-for="user in stats.recentUsers"
                     :key="user.id"
                     class="hover:bg-slate-50"
                   >
@@ -126,26 +130,31 @@
                         {{ user.email }}
                       </div>
                       <div class="text-xs">
-                        {{ user.id }}
+                        ID: {{ user.id }}
                       </div>
                     </td>
                     <td class="px-6 py-4">
                       <span
                         :class="[
                           'inline-flex items-center rounded-full px-2 py-1 text-xs font-medium',
-                          user.isPro ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
+                          user.is_pro ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
                         ]"
                       >
-                        {{ user.isPro ? 'Pro' : 'Free' }}
+                        {{ user.is_pro ? 'Pro' : 'Free' }}
                       </span>
                     </td>
                     <td class="px-6 py-4">
-                      {{ user.joinedAt }}
+                      {{ new Date(user.created_at).toLocaleDateString() }}
                     </td>
                     <td class="px-6 py-4 text-right">
                       <button class="text-brand-600 hover:text-brand-800 font-medium">
-                        Edit
+                        View
                       </button>
+                    </td>
+                  </tr>
+                  <tr v-if="stats.recentUsers.length === 0">
+                    <td colspan="4" class="px-6 py-8 text-center text-slate-400 italic">
+                      No users found.
                     </td>
                   </tr>
                 </tbody>
@@ -154,12 +163,15 @@
           </div>
         </div>
 
-        <!-- Template Management -->
+        <!-- Template Management & Status -->
         <div class="space-y-8">
           <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <h3 class="mb-4 text-lg font-bold text-slate-900">
               Add New Template
             </h3>
+            <p class="text-xs text-slate-500 mb-4">
+              Register a new Vue layout component for the builder.
+            </p>
             <form
               class="space-y-4"
               @submit.prevent="addTemplate"
@@ -182,40 +194,34 @@
                   placeholder="e.g. modern_prof"
                 >
               </div>
-              <div>
-                <label class="block text-sm font-medium text-slate-700">Description</label>
-                <textarea
-                  v-model="newTemplate.description"
-                  rows="3"
-                  class="mt-1 block w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                  placeholder="Short description..."
-                />
-              </div>
               <button
                 type="submit"
                 class="w-full rounded-md bg-brand-600 px-4 py-2 text-sm font-bold text-white hover:bg-brand-700 transition"
               >
-                Create Template
+                Register Layout
               </button>
             </form>
           </div>
 
           <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
             <h3 class="mb-4 text-lg font-bold text-slate-900">
-              System Status
+              System Health
             </h3>
             <div class="space-y-4">
               <div class="flex items-center justify-between text-sm">
-                <span class="text-slate-600">Database</span>
+                <span class="text-slate-600">PHP Backend</span>
                 <span class="font-medium text-emerald-600">Operational</span>
               </div>
               <div class="flex items-center justify-between text-sm">
-                <span class="text-slate-600">Stripe API</span>
+                <span class="text-slate-600">MySQL Database</span>
                 <span class="font-medium text-emerald-600">Operational</span>
               </div>
               <div class="flex items-center justify-between text-sm">
-                <span class="text-slate-600">Auth Service</span>
+                <span class="text-slate-600">Stripe Integration</span>
                 <span class="font-medium text-emerald-600">Operational</span>
+              </div>
+              <div class="pt-2 text-[10px] text-slate-400">
+                Running in production mode. Session security enabled.
               </div>
             </div>
           </div>
@@ -228,6 +234,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import axios from 'axios';
 import {
   Users,
   DollarSign,
@@ -260,11 +267,16 @@ ChartJS.register(
   CategoryScale
 );
 
-interface UserData {
-  id: string;
-  email: string;
-  isPro: boolean;
-  joinedAt: string;
+interface SalesPoint {
+    date: string;
+    amount: number | string;
+}
+
+interface RecentUser {
+    id: string;
+    email: string;
+    is_pro: number | boolean;
+    created_at: string;
 }
 
 export default defineComponent({
@@ -280,15 +292,16 @@ export default defineComponent({
   },
   data() {
     return {
-      users: [
-        { id: '1', email: 'user@example.com', isPro: true, joinedAt: '2024-05-01' },
-        { id: '2', email: 'test@domain.com', isPro: false, joinedAt: '2024-05-03' },
-        { id: '3', email: 'alex@dev.io', isPro: true, joinedAt: '2024-05-05' },
-      ] as UserData[],
+      stats: {
+          totalUsers: 0,
+          totalSales: 0,
+          totalResumes: 0,
+          salesHistory: [] as SalesPoint[],
+          recentUsers: [] as RecentUser[]
+      },
       newTemplate: {
         name: '',
-        id: '',
-        description: ''
+        id: ''
       },
       chartOptions: {
         responsive: true,
@@ -309,32 +322,40 @@ export default defineComponent({
     };
   },
   computed: {
-    totalRevenue(): number {
-      return this.users.filter(u => u.isPro).length * 10;
-    },
-    monthlySales(): number {
-      return this.users.filter(u => u.isPro).length;
-    },
     chartData(): ChartData<'line'> {
       return {
-        labels: ['May 1', 'May 2', 'May 3', 'May 4', 'May 5', 'May 6'],
+        labels: this.stats.salesHistory.map(s => s.date),
         datasets: [
           {
-            label: 'Sales ($)',
-            data: [0, 10, 0, 10, 0, 10],
+            label: 'Daily Revenue ($)',
+            data: this.stats.salesHistory.map(s => Number(s.amount)),
             borderColor: '#1e6cf5',
-            backgroundColor: '#1e6cf5',
+            backgroundColor: 'rgba(30, 108, 245, 0.1)',
+            fill: true,
             tension: 0.3
           }
         ]
       };
     }
   },
+  async mounted() {
+      await this.fetchStats();
+  },
   methods: {
+    async fetchStats() {
+        try {
+            const res = await axios.get('./api/index.php/admin/stats');
+            if (res.data && !res.data.error) {
+                this.stats = res.data;
+            }
+        } catch (e) {
+            console.error("Failed to fetch admin stats", e);
+        }
+    },
     addTemplate() {
       if (!this.newTemplate.name || !this.newTemplate.id) return;
-      alert(`Template "${this.newTemplate.name}" would be added to the database. In a real app, this would trigger a cloud function to register the new layout.`);
-      this.newTemplate = { name: '', id: '', description: '' };
+      alert(`Template Registry: In a production environment, this would save the template metadata to the MySQL 'templates' table and notify the build system to include the new layout.`);
+      this.newTemplate = { name: '', id: '' };
     }
   }
 });
