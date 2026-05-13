@@ -4,6 +4,7 @@
  *
  * Provides endpoints for:
  * - User Authentication (Login/Signup with Sessions)
+ * - Google OAuth Authentication
  * - Resume synchronization (MySQL)
  * - Stripe Checkout integration
  * - Subscription verification
@@ -121,6 +122,43 @@ elseif ($path === '/auth/login' && $method === 'POST') {
         echo json_encode(['success' => true, 'user' => $user]);
     } else {
         echo json_encode(['error' => 'Invalid credentials']);
+    }
+}
+/**
+ * POST /auth/google
+ * Verifies Google ID token and logs user in.
+ */
+elseif ($path === '/auth/google' && $method === 'POST') {
+    $id_token = $input['credential'];
+
+    // Verify token using Google's API
+    $ch = curl_init("https://oauth2.googleapis.com/tokeninfo?id_token=" . $id_token);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    $payload = json_decode($response, true);
+
+    if (isset($payload['aud']) && $payload['aud'] === GOOGLE_CLIENT_ID) {
+        $email = $payload['email'];
+
+        // Find or create user
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch();
+
+        if (!$user) {
+            $stmt = $pdo->prepare("INSERT INTO users (email, password) VALUES (?, 'GOOGLE_AUTH')");
+            $stmt->execute([$email]);
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
+            $stmt->execute([$pdo->lastInsertId()]);
+            $user = $stmt->fetch();
+        }
+
+        $_SESSION['user_id'] = $user['id'];
+        $_SESSION['is_admin'] = $user['is_admin'];
+        unset($user['password']);
+        echo json_encode(['success' => true, 'user' => $user]);
+    } else {
+        echo json_encode(['error' => 'Invalid Google token']);
     }
 }
 /**

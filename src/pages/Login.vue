@@ -10,8 +10,24 @@
         </p>
       </div>
 
+      <!-- Google Login Section -->
+      <div class="mt-8">
+        <div
+          ref="googleBtn"
+          class="flex justify-center"
+        />
+        <div class="relative mt-6">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-slate-200" />
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="bg-white px-2 text-slate-500">Or continue with email</span>
+          </div>
+        </div>
+      </div>
+
       <form
-        class="mt-8 space-y-6"
+        class="mt-6 space-y-6"
         @submit.prevent="handleSubmit"
       >
         <div class="space-y-4 rounded-md shadow-sm">
@@ -82,6 +98,22 @@
 import { defineComponent } from 'vue';
 import { useAuth } from '../store/auth';
 
+/**
+ * Types for Google Identity Services.
+ */
+interface GoogleAuthResponse {
+    credential: string;
+}
+
+declare const google: {
+    accounts: {
+        id: {
+            initialize: (config: { client_id: string; callback: (resp: GoogleAuthResponse) => void }) => void;
+            renderButton: (el: HTMLElement, options: { theme: string; size: string; width: string }) => void;
+        }
+    }
+};
+
 export default defineComponent({
   name: 'Login',
   data() {
@@ -93,7 +125,41 @@ export default defineComponent({
       error: ''
     };
   },
+  mounted() {
+    this.initGoogleAuth();
+  },
   methods: {
+    initGoogleAuth() {
+        if (typeof google === 'undefined') {
+            setTimeout(() => this.initGoogleAuth(), 500);
+            return;
+        }
+
+        google.accounts.id.initialize({
+            client_id: 'your-client-id-here.apps.googleusercontent.com',
+            callback: this.handleGoogleCallback
+        });
+
+        google.accounts.id.renderButton(
+            this.$refs.googleBtn as HTMLElement,
+            { theme: "outline", size: "large", width: "100%" }
+        );
+    },
+
+    async handleGoogleCallback(response: GoogleAuthResponse) {
+        this.loading = true;
+        this.error = '';
+        const auth = useAuth();
+        try {
+            await auth.loginWithGoogle(response.credential);
+            this.$router.push('/builder');
+        } catch (e: unknown) {
+            this.error = (e as Error).message || 'Google authentication failed';
+        } finally {
+            this.loading = false;
+        }
+    },
+
     async handleSubmit() {
       this.loading = true;
       this.error = '';

@@ -94,6 +94,20 @@ export const useAuth = defineStore("auth", {
     },
 
     /**
+     * Authenticates a user using a Google ID token.
+     */
+    async loginWithGoogle(credential: string) {
+        const res = await axios.post(`${API_URL}/auth/google`, { credential });
+        if (res.data.success) {
+            this.user = res.data.user;
+            this.isPro = !!this.user?.is_pro;
+            this.isAdmin = !!this.user?.is_admin;
+            return true;
+        }
+        throw new Error(res.data.error || 'Google login failed');
+    },
+
+    /**
      * Creates a new user account and automatically logs them in.
      */
     async signup(email: string, pass: string) {
