@@ -1,4 +1,5 @@
 <template>
+  <!-- Error state: shown if resume ID is invalid -->
   <div
     v-if="!resume"
     class="grid h-screen place-items-center bg-slate-50"
@@ -20,7 +21,7 @@
     v-else
     class="flex h-screen flex-col bg-slate-100"
   >
-    <!-- Top bar -->
+    <!-- Top bar / Toolbar -->
     <header class="no-print flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-2">
       <button
         type="button"
@@ -35,7 +36,7 @@
           <input
             v-model="nameDraft"
             autofocus
-            class="w-64 rounded-md border border-slate-300 px-2 py-1 text-sm font-semibold text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
+            class="w-48 sm:w-64 rounded-md border border-slate-300 px-2 py-1 text-sm font-semibold text-slate-900 outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-200"
             @blur="saveName"
             @keydown.enter="saveName"
             @keydown.esc="editingName = false"
@@ -51,7 +52,7 @@
               :size="14"
               class="text-slate-400"
             />
-            <span class="truncate">{{ resume.name }}</span>
+            <span class="truncate max-w-[100px] sm:max-w-none">{{ resume.name }}</span>
             <Pencil
               :size="12"
               class="text-slate-400"
@@ -60,7 +61,7 @@
         </template>
         <span
           v-if="savedAt !== null"
-          class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700"
+          class="hidden sm:inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700"
         >
           <Check :size="12" /> Saved
         </span>
@@ -70,19 +71,20 @@
         class="inline-flex items-center gap-1.5 rounded-md bg-brand-600 px-3 py-1.5 text-sm font-semibold text-white hover:bg-brand-700"
         @click="print"
       >
-        <Download :size="14" /> Download PDF
+        <Download :size="14" /> <span class="hidden sm:inline">Download PDF</span><span class="sm:hidden">PDF</span>
       </button>
     </header>
 
-    <!-- Body -->
-    <div class="flex min-h-0 flex-1">
-      <!-- Left panel -->
-      <aside class="no-print flex w-full max-w-xl shrink-0 flex-col border-r border-slate-200 bg-slate-50 lg:w-[44%]">
-        <div class="flex shrink-0 items-center gap-1 border-b border-slate-200 bg-white px-2 py-2">
+    <!-- Body: Main workspace area -->
+    <div class="flex min-h-0 flex-1 flex-col lg:flex-row overflow-hidden">
+      <!-- Left panel: Editor controls -->
+      <aside class="no-print flex w-full shrink-0 flex-col border-r border-slate-200 bg-slate-50 lg:w-[44%] lg:max-w-xl">
+        <!-- Tabs for mobile navigation and desktop organization -->
+        <div class="flex shrink-0 items-center gap-1 border-b border-slate-200 bg-white px-2 py-2 overflow-x-auto">
           <button
             type="button"
             :class="[
-              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium',
+              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium whitespace-nowrap',
               tab === 'content' ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-100'
             ]"
             @click="tab = 'content'"
@@ -92,15 +94,27 @@
           <button
             type="button"
             :class="[
-              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium',
+              'inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium whitespace-nowrap',
               tab === 'design' ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-100'
             ]"
             @click="tab = 'design'"
           >
             <Paintbrush :size="14" /> Design
           </button>
+          <button
+            type="button"
+            :class="[
+              'lg:hidden inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium whitespace-nowrap',
+              tab === 'preview' ? 'bg-brand-50 text-brand-700' : 'text-slate-600 hover:bg-slate-100'
+            ]"
+            @click="tab = 'preview'"
+          >
+            <Eye :size="14" /> Preview
+          </button>
         </div>
+
         <div class="scroll-thin min-h-0 flex-1 overflow-y-auto p-4">
+          <!-- Content tab: Form sections -->
           <div
             v-if="tab === 'content'"
             class="space-y-3"
@@ -121,6 +135,7 @@
                 @remove-section="removeSection(k)"
               />
             </div>
+            <!-- Dynamic section addition -->
             <div
               v-if="availableSections.length > 0"
               class="rounded-lg border border-dashed border-slate-300 bg-white p-4"
@@ -141,41 +156,53 @@
               </div>
             </div>
           </div>
+
+          <!-- Design tab: Styling options -->
           <DesignPanel
-            v-else
+            v-else-if="tab === 'design'"
             :resume="resume"
             @update="update"
           />
+
+          <!-- Preview tab: Visible only on mobile -->
+          <div
+            v-else-if="tab === 'preview'"
+            class="lg:hidden flex justify-center pb-12"
+          >
+            <ResumePreview
+              :resume="resume"
+              :scale="mobileScale"
+              :interactive="false"
+            />
+          </div>
         </div>
       </aside>
 
-      <!-- Preview -->
+      <!-- Desktop Preview: Side-by-side view for large screens -->
       <section
         ref="previewContainer"
-        class="scroll-thin relative min-w-0 flex-1 overflow-auto"
+        class="hidden lg:block scroll-thin relative min-w-0 flex-1 overflow-auto bg-slate-200"
       >
-        <div class="no-print sticky top-0 z-10 flex items-center justify-end gap-2 border-b border-slate-200 bg-slate-50/90 px-4 py-2 backdrop-blur">
-          <!-- Zoom controls could go here -->
-        </div>
-        <div class="flex justify-center p-6">
+        <div class="flex justify-center p-12">
           <ResumePreview
             id="main-resume-preview"
-            class="no-print"
+            class="shadow-2xl"
             :resume="resume"
             :scale="scale"
           />
-          <!-- Hidden printable version -->
-          <div class="print:block hidden">
-            <ResumePreview
-              :resume="resume"
-              :printable="true"
-            />
-          </div>
         </div>
       </section>
     </div>
 
-    <!-- Upgrade Modal -->
+    <!-- Print area: Hidden from screen, visible only during @media print -->
+    <div class="print:block hidden">
+      <ResumePreview
+        :resume="resume"
+        :printable="true"
+      />
+    </div>
+
+    <!-- Upgrade Modal: Subscription gate -->
     <div
       v-if="showUpgradeModal"
       class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm"
@@ -264,6 +291,7 @@ import {
   Paintbrush,
   Pencil,
   Plus,
+  Eye,
 } from 'lucide-vue-next';
 import { SECTION_LABELS, useResumes } from '../store/resumes';
 import { useAuth } from '../store/auth';
@@ -279,6 +307,9 @@ import CertificationsSection from '../components/form/sections/CertificationsSec
 import LanguagesSection from '../components/form/sections/LanguagesSection.vue';
 import DesignPanel from '../components/form/DesignPanel.vue';
 
+/**
+ * Defining the standard order of optional resume sections.
+ */
 const SECTION_ORDER: SectionKey[] = [
   "summary",
   "experience",
@@ -311,14 +342,16 @@ export default defineComponent({
     LayoutGrid,
     Paintbrush,
     Pencil,
-    Plus
+    Plus,
+    Eye
   },
   data() {
     return {
-      tab: 'content' as 'content' | 'design',
+      tab: 'content' as 'content' | 'design' | 'preview',
       editingName: false,
       nameDraft: '',
       scale: 0.72,
+      mobileScale: 0.4,
       savedAt: null as number | null,
       resizeObserver: null as ResizeObserver | null,
       showUpgradeModal: false,
@@ -331,12 +364,18 @@ export default defineComponent({
       return useResumes().resumes[this.id];
     },
     auth() { return useAuth(); },
+    /**
+     * Lists sections that haven't been added to the resume yet.
+     */
     availableSections(): SectionKey[] {
       if (!this.resume) return [];
       return SECTION_ORDER.filter((k) => !this.resume!.sections.includes(k));
     }
   },
   watch: {
+    /**
+     * Show "Saved" indicator briefly when the resume is updated.
+     */
     'resume.updatedAt'(newVal, oldVal) {
       if (oldVal !== undefined && newVal !== oldVal) {
         this.savedAt = Date.now();
@@ -346,8 +385,9 @@ export default defineComponent({
   mounted() {
     const el = this.$refs.previewContainer as HTMLElement;
     if (el) {
+      // Auto-fit logic for the desktop preview
       const fit = () => {
-        const w = el.clientWidth - 48;
+        const w = el.clientWidth - 96;
         const target = Math.max(0.35, Math.min(1.1, w / (8.5 * 96)));
         this.scale = target;
       };
@@ -355,6 +395,16 @@ export default defineComponent({
       this.resizeObserver = new ResizeObserver(fit);
       this.resizeObserver.observe(el);
     }
+
+    // Auto-calculate scale for mobile preview
+    const updateMobileScale = () => {
+        if (window.innerWidth < 1024) {
+            const w = window.innerWidth - 32;
+            this.mobileScale = Math.min(0.8, w / (8.5 * 96));
+        }
+    };
+    updateMobileScale();
+    window.addEventListener('resize', updateMobileScale);
   },
   beforeUnmount() {
     if (this.resizeObserver) {
@@ -362,6 +412,9 @@ export default defineComponent({
     }
   },
   methods: {
+    /**
+     * Update resume state in the store.
+     */
     update(updater: (r: Resume) => Resume) {
       useResumes().updateResume(this.id, updater);
     },
@@ -383,6 +436,9 @@ export default defineComponent({
     removeSection(key: SectionKey) {
       useResumes().removeSection(this.id, key);
     },
+    /**
+     * Returns the appropriate Vue component name for a section key.
+     */
     getSectionComponent(key: SectionKey) {
       const map: Record<SectionKey, string> = {
         summary: 'SummarySection',
@@ -395,6 +451,9 @@ export default defineComponent({
       };
       return map[key];
     },
+    /**
+     * Triggers the print dialog, gating it behind subscription status.
+     */
     print() {
       if (!this.auth.user || !this.auth.isPro) {
         this.showUpgradeModal = true;
