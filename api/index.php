@@ -10,12 +10,14 @@
  * - Admin Analytics
  */
 
+require_once 'config.php';
+
 // Basic session configuration
 session_set_cookie_params([
     'lifetime' => 86400,
     'path' => '/',
-    'domain' => '', // Set to your domain in production
-    'secure' => false, // Set to true if using HTTPS
+    'domain' => '',
+    'secure' => false,
     'httponly' => true,
     'samesite' => 'Lax'
 ]);
@@ -31,18 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     die();
 }
 
-// --- DATABASE CONFIGURATION ---
-$host = 'localhost';
-$db   = 'quick_resume';
-$user = 'root';
-$pass = '';
+// --- DATABASE CONNECTION ---
 $charset = 'utf8mb4';
-
-// Stripe Keys (Ideally should be environment variables)
-$stripe_secret_key = 'sk_test_your_key_here';
-$app_url = 'http://localhost:5174';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+$dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=$charset";
 $options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
@@ -50,9 +43,10 @@ $options = [
 ];
 
 try {
-     $pdo = new PDO($dsn, $user, $pass, $options);
+     $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
 } catch (\PDOException $e) {
-     echo json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]);
+     http_response_code(500);
+     echo json_encode(['error' => 'Database connection failed. Please check api/config.php.']);
      die();
 }
 
@@ -69,9 +63,6 @@ function stripe_request($endpoint, $data, $api_key) {
     return json_decode($response, true);
 }
 
-/**
- * Ensures the user is logged in before proceeding.
- */
 function require_auth() {
     if (!isset($_SESSION['user_id'])) {
         echo json_encode(['error' => 'Unauthorized']);
@@ -80,9 +71,6 @@ function require_auth() {
     return $_SESSION['user_id'];
 }
 
-/**
- * Ensures the user is an admin.
- */
 function require_admin($pdo) {
     $userId = require_auth();
     $stmt = $pdo->prepare("SELECT is_admin FROM users WHERE id = ?");
@@ -197,14 +185,14 @@ elseif ($path === '/create-checkout-session' && $method === 'POST') {
             'quantity' => 1,
         ]],
         'mode' => 'payment',
-        'success_url' => $app_url . '/#/builder?session_id={CHECKOUT_SESSION_ID}',
-        'cancel_url' => $app_url . '/#/pricing',
+        'success_url' => APP_URL . '/#/builder?session_id={CHECKOUT_SESSION_ID}',
+        'cancel_url' => APP_URL . '/#/pricing',
         'metadata' => [
             'user_id' => $userId
         ]
     ];
 
-    $session = stripe_request('checkout/sessions', $data, $stripe_secret_key);
+    $session = stripe_request('checkout/sessions', $data, STRIPE_SECRET_KEY);
 
     if (isset($session['id'])) {
         echo json_encode(['id' => $session['id'], 'url' => $session['url']]);
@@ -219,10 +207,9 @@ elseif ($path === '/verify-payment' && $method === 'POST') {
     $userId = require_auth();
     $sessionId = $input['session_id'];
 
-    $session = stripe_request("checkout/sessions/$sessionId", [], $stripe_secret_key);
+    $session = stripe_request("checkout/sessions/$sessionId", [], STRIPE_SECRET_KEY);
 
     if (isset($session['payment_status']) && $session['payment_status'] === 'paid') {
-        // Ensure the payment belongs to the current user
         if ($session['metadata']['user_id'] != $userId) {
             echo json_encode(['error' => 'Unauthorized payment session']);
             die();
@@ -245,23 +232,18 @@ elseif ($path === '/verify-payment' && $method === 'POST') {
 elseif ($path === '/admin/stats' && $method === 'GET') {
     require_admin($pdo);
 
-    // Total Users
     $stmt = $pdo->query("SELECT COUNT(*) as count FROM users");
     $totalUsers = $stmt->fetch()['count'];
 
-    // Total Sales
     $stmt = $pdo->query("SELECT SUM(amount) as total FROM sales");
     $totalSales = $stmt->fetch()['total'] ?: 0;
 
-    // Active Resumes
     $stmt = $pdo->query("SELECT COUNT(*) as count FROM resumes");
     $totalResumes = $stmt->fetch()['count'];
 
-    // Recent Sales for Chart
     $stmt = $pdo->query("SELECT DATE(created_at) as date, SUM(amount) as amount FROM sales GROUP BY DATE(created_at) ORDER BY date DESC LIMIT 7");
     $salesHistory = array_reverse($stmt->fetchAll());
 
-    // Recent Users for Table
     $stmt = $pdo->query("SELECT id, email, is_pro, created_at FROM users ORDER BY created_at DESC LIMIT 5");
     $recentUsers = $stmt->fetchAll();
 
