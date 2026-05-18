@@ -3,154 +3,155 @@
     <Navbar />
     <main class="flex-1">
       <!-- Hero -->
-      <section class="bg-gradient-to-b from-white to-slate-50">
-        <div class="mx-auto grid max-w-6xl gap-10 px-4 py-14 md:grid-cols-2 md:py-20">
-          <div class="flex flex-col justify-center">
-            <div class="mb-4 inline-flex w-fit items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
-              <Sparkles :size="14" /> Free. No login required.
+      <section class="relative overflow-hidden bg-white py-16 md:py-24 lg:py-32">
+        <div class="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 md:grid-cols-2 lg:px-8">
+          <div class="flex flex-col justify-center text-center md:text-left">
+            <div class="mx-auto mb-6 inline-flex w-fit items-center gap-2 rounded-full border border-brand-200 bg-brand-50 px-4 py-1.5 text-xs font-bold text-brand-700 md:mx-0">
+              <Sparkles :size="14" /> 100% Free for life. No login required.
             </div>
-            <h1 class="text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
-              Build a resume that gets you <span class="text-brand-600">hired</span>.
+            <h1 class="text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl">
+              Build a resume that gets you <span class="text-brand-600">noticed</span>.
             </h1>
-            <p class="mt-4 max-w-xl text-lg text-slate-600">
-              Pick a template, fill in your details, and watch your resume come together in
-              real time. Download a clean, ATS-friendly PDF in minutes.
+            <p class="mt-6 max-w-xl text-lg leading-relaxed text-slate-600 md:text-xl">
+              QuickResume helps you create a professional, ATS-friendly resume in minutes. Choose a template, add your details, and download a polished PDF instantly.
             </p>
-            <div class="mt-6 flex flex-wrap items-center gap-3">
+            <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row md:justify-start">
               <router-link
                 to="/builder"
-                class="inline-flex items-center gap-2 rounded-md bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-700"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-brand-600 px-8 py-4 text-base font-bold text-white shadow-xl shadow-brand-200 transition hover:bg-brand-700 active:scale-[0.98] sm:w-auto"
               >
-                Create my resume <ArrowRight :size="16" />
+                Create My Resume <ArrowRight :size="20" />
               </router-link>
               <router-link
                 to="/templates"
-                class="inline-flex items-center gap-2 rounded-md border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                class="inline-flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-8 py-4 text-base font-bold text-slate-700 transition hover:bg-slate-50 active:scale-[0.98] sm:w-auto"
               >
-                Browse templates
+                Browse Templates
               </router-link>
             </div>
-            <div class="mt-6 flex flex-wrap gap-6 text-sm text-slate-500">
-              <div class="flex items-center gap-2">
-                <ShieldCheck
-                  :size="16"
-                  class="text-emerald-600"
-                /> ATS-friendly layouts
-              </div>
-              <div class="flex items-center gap-2">
-                <MousePointerClick
-                  :size="16"
-                  class="text-brand-600"
-                /> Edit with a live
-                preview
-              </div>
-              <div class="flex items-center gap-2">
-                <Download
-                  :size="16"
-                  class="text-slate-700"
-                /> Export to PDF
+
+            <div class="mt-12 flex flex-wrap justify-center gap-6 md:justify-start">
+              <div
+                v-for="benefit in benefits"
+                :key="benefit"
+                class="flex items-center gap-2 text-sm font-semibold text-slate-500"
+              >
+                <CheckCircle
+                  :size="18"
+                  class="text-emerald-500"
+                /> {{ benefit }}
               </div>
             </div>
           </div>
-          <div class="relative">
-            <div class="pointer-events-none absolute -left-6 top-8 hidden md:block">
-              <div class="w-56 rotate-[-6deg] rounded-lg border border-slate-200 bg-white shadow-lg">
-                <TemplateThumb template-id="modern" />
-              </div>
+
+          <!-- Hero Image/Thumbnails -->
+          <div class="relative hidden md:block">
+            <div class="absolute -left-12 top-10 w-64 rotate-[-6deg] rounded-xl border border-slate-200 bg-white p-2 shadow-2xl transition hover:rotate-0 hover:scale-105">
+              <TemplateThumb template-id="modern" />
             </div>
-            <div class="pointer-events-none absolute -right-4 bottom-6 hidden md:block">
-              <div class="w-56 rotate-[6deg] rounded-lg border border-slate-200 bg-white shadow-lg">
-                <TemplateThumb template-id="twocol" />
-              </div>
+            <div class="absolute -right-8 bottom-12 w-64 rotate-[8deg] rounded-xl border border-slate-200 bg-white p-2 shadow-2xl transition hover:rotate-0 hover:scale-105">
+              <TemplateThumb template-id="twocol" />
             </div>
-            <div class="mx-auto w-64 rounded-lg border border-slate-200 bg-white shadow-xl md:w-72">
+            <div class="mx-auto w-72 rounded-xl border border-slate-200 bg-white p-2 shadow-2xl lg:w-80">
               <TemplateThumb template-id="classic" />
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Templates -->
-      <section class="mx-auto max-w-6xl px-4 py-14">
-        <div class="mb-8 flex items-end justify-between">
-          <div>
-            <h2 class="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
-              Pick a template, make it yours
-            </h2>
-            <p class="mt-2 text-slate-600">
-              Ten professional layouts, all customizable — colors, fonts, and spacing.
-            </p>
-          </div>
-          <router-link
-            to="/templates"
-            class="hidden text-sm font-medium text-brand-700 hover:underline md:inline-flex"
-          >
-            View all →
-          </router-link>
-        </div>
-        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <router-link
-            v-for="t in TEMPLATES"
-            :key="t.id"
-            to="/builder"
-            class="group block rounded-xl border border-slate-200 bg-white p-3 transition hover:border-brand-300 hover:shadow-lg"
-          >
-            <TemplateThumb :template-id="t.id" />
-            <div class="mt-3">
-              <div class="font-semibold text-slate-900">
-                {{ t.name }}
-              </div>
-              <div class="mt-1 text-sm text-slate-500">
-                {{ t.description }}
-              </div>
+      <!-- Templates Showcase -->
+      <section class="bg-slate-50 py-20">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div class="mb-12 flex flex-col items-end justify-between gap-4 md:flex-row">
+            <div class="text-center md:text-left">
+              <h2 class="text-3xl font-extrabold text-slate-900 md:text-4xl">
+                Ready-to-use professional layouts
+              </h2>
+              <p class="mt-3 text-lg text-slate-600">
+                Ten designs for every industry — modern, creative, or executive.
+              </p>
             </div>
-          </router-link>
+            <router-link
+              to="/templates"
+              class="font-bold text-brand-700 transition hover:text-brand-800 hover:underline"
+            >
+              View all 10 layouts →
+            </router-link>
+          </div>
+          <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <router-link
+              v-for="t in TEMPLATES.slice(0, 4)"
+              :key="t.id"
+              to="/builder"
+              class="group block rounded-2xl border border-slate-200 bg-white p-3 transition hover:border-brand-300 hover:shadow-xl"
+            >
+              <div class="overflow-hidden rounded-xl bg-slate-50">
+                <TemplateThumb :template-id="t.id" />
+              </div>
+              <div class="mt-5 px-1">
+                <div class="font-bold text-slate-900 group-hover:text-brand-700">
+                  {{ t.name }}
+                </div>
+                <div class="mt-1 text-sm text-slate-500">
+                  {{ t.description }}
+                </div>
+              </div>
+            </router-link>
+          </div>
         </div>
       </section>
 
-      <!-- How it works -->
-      <section class="bg-white py-14">
-        <div class="mx-auto max-w-6xl px-4">
-          <h2 class="text-center text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
-            How it works
+      <!-- Features / How it works -->
+      <section class="bg-white py-24">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
+          <h2 class="text-3xl font-extrabold text-slate-900 md:text-4xl">
+            Building your career shouldn't be hard.
           </h2>
-          <p class="mx-auto mt-2 max-w-2xl text-center text-slate-600">
-            A simple, focused flow — no sign-up, no distractions.
+          <p class="mx-auto mt-4 max-w-2xl text-lg text-slate-600">
+            A simple, intuitive workflow designed to get you from blank page to PDF in minutes.
           </p>
-          <div class="mt-10 grid gap-6 md:grid-cols-4">
+
+          <div class="mt-16 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
             <div
               v-for="(s, i) in steps"
               :key="i"
-              class="rounded-xl border border-slate-200 bg-slate-50 p-5"
+              class="flex flex-col items-center rounded-2xl border border-slate-100 bg-slate-50 p-8 transition hover:bg-white hover:shadow-lg"
             >
-              <div class="mb-3 grid h-10 w-10 place-items-center rounded-lg bg-brand-100 text-brand-700">
-                <component :is="s.icon" />
+              <div class="mb-6 flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-lg shadow-brand-100">
+                <component
+                  :is="s.icon"
+                  :size="28"
+                />
               </div>
-              <div class="font-semibold text-slate-900">
+              <h3 class="text-xl font-bold text-slate-900">
                 {{ i + 1 }}. {{ s.title }}
-              </div>
-              <div class="mt-1 text-sm text-slate-600">
+              </h3>
+              <p class="mt-3 text-sm leading-relaxed text-slate-600">
                 {{ s.body }}
-              </div>
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- CTA -->
-      <section class="mx-auto my-16 max-w-5xl px-4">
-        <div class="rounded-2xl bg-brand-600 p-8 text-center text-white md:p-12">
-          <h3 class="text-2xl font-bold md:text-3xl">
-            Ready to build your resume?
+      <!-- Final CTA -->
+      <section class="mx-auto my-20 max-w-6xl px-4">
+        <div class="relative overflow-hidden rounded-3xl bg-brand-600 px-8 py-16 text-center text-white md:px-20 md:py-24">
+          <!-- Background decoration -->
+          <div class="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+          <div class="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-brand-900/20 blur-3xl" />
+
+          <h3 class="relative text-3xl font-extrabold md:text-5xl">
+            Get your dream job today.
           </h3>
-          <p class="mx-auto mt-2 max-w-xl text-brand-100">
-            It takes about ten minutes to go from a blank page to a polished, downloadable PDF.
+          <p class="relative mx-auto mt-6 max-w-xl text-lg text-brand-100 md:text-xl">
+            Join thousands of professionals who have used QuickResume to build their careers. Free forever.
           </p>
           <router-link
             to="/builder"
-            class="mt-6 inline-flex items-center gap-2 rounded-md bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow-sm hover:bg-slate-100"
+            class="relative mt-10 inline-flex items-center gap-2 rounded-xl bg-white px-10 py-4 text-lg font-bold text-brand-700 shadow-2xl transition hover:bg-slate-50 active:scale-[0.98]"
           >
-            Start building <ArrowRight :size="16" />
+            Start Building Now <ArrowRight :size="20" />
           </router-link>
         </div>
       </section>
@@ -168,8 +169,7 @@ import {
   Paintbrush,
   Download,
   Sparkles,
-  ShieldCheck,
-  MousePointerClick,
+  CheckCircle,
 } from 'lucide-vue-next';
 import Navbar from '../components/Navbar.vue';
 import AppFooter from '../components/AppFooter.vue';
@@ -184,33 +184,32 @@ export default defineComponent({
     TemplateThumb,
     Sparkles,
     ArrowRight,
-    ShieldCheck,
-    MousePointerClick,
-    Download
+    CheckCircle
   },
   data() {
     return {
       TEMPLATES,
+      benefits: ["ATS-Friendly", "Live Preview", "PDF Export"],
       steps: [
         {
           icon: markRaw(LayoutTemplate),
-          title: "Choose a template",
-          body: "Start from a clean, professional layout that suits your story.",
+          title: "Pick a layout",
+          body: "Select a professional design that highlights your unique strengths and experience.",
         },
         {
           icon: markRaw(FileText),
-          title: "Fill in your details",
-          body: "Add experience, education, projects, and skills with guided forms.",
+          title: "Input details",
+          body: "Fill in your experience, education, and skills. We handle all the formatting for you.",
         },
         {
           icon: markRaw(Paintbrush),
-          title: "Customize the design",
-          body: "Tweak color, font, and spacing — see every change instantly.",
+          title: "Make it yours",
+          body: "Adjust colors, fonts, and spacing in real-time to match your personal brand.",
         },
         {
           icon: markRaw(Download),
-          title: "Download your PDF",
-          body: "Export a print-ready PDF and start applying with confidence.",
+          title: "Export to PDF",
+          body: "Download a high-quality, print-ready PDF and start applying for your dream role.",
         },
       ]
     };

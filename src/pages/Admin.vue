@@ -88,7 +88,10 @@
                 :data="chartData"
                 :options="chartOptions"
               />
-              <div v-else class="flex h-full items-center justify-center text-slate-400">
+              <div
+                v-else
+                class="flex h-full items-center justify-center text-slate-400"
+              >
                 No sales data available.
               </div>
             </div>
@@ -153,7 +156,10 @@
                     </td>
                   </tr>
                   <tr v-if="stats.recentUsers.length === 0">
-                    <td colspan="4" class="px-6 py-8 text-center text-slate-400 italic">
+                    <td
+                      colspan="4"
+                      class="px-6 py-8 text-center text-slate-400 italic"
+                    >
                       No users found.
                     </td>
                   </tr>
